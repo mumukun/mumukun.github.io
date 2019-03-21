@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="React,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="React 生命周期图示React 的整个生命周期的流程图大致就是这样。生命周期的流程可以描述为这几个阶段： Initialization &amp;amp; mounting getDefaultProps getInitalState componentWillMount render componentDidMount  State Change &amp;amp; Props Chnage">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React源码解析3-组件的生命周期">
+<meta property="og:url" content="http://yoursite.com/2017/06/21/React源码解析3-组件的生命周期/index.html">
+<meta property="og:site_name" content="kun mu&#39;s blog">
+<meta property="og:description" content="React 生命周期图示React 的整个生命周期的流程图大致就是这样。生命周期的流程可以描述为这几个阶段： Initialization &amp;amp; mounting getDefaultProps getInitalState componentWillMount render componentDidMount  State Change &amp;amp; Props Chnage">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.cdn.nanamumu.cn/React%20lifecycle.jpg">
+<meta property="og:updated_time" content="2019-03-21T15:03:50.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React源码解析3-组件的生命周期">
+<meta name="twitter:description" content="React 生命周期图示React 的整个生命周期的流程图大致就是这样。生命周期的流程可以描述为这几个阶段： Initialization &amp;amp; mounting getDefaultProps getInitalState componentWillMount render componentDidMount  State Change &amp;amp; Props Chnage">
+<meta name="twitter:image" content="http://blog.cdn.nanamumu.cn/React%20lifecycle.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/21/React源码解析3-组件的生命周期/">
+
+
+
+
+
+  <title>React源码解析3-组件的生命周期 | kun mu's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kun mu's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">全栈之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/21/React源码解析3-组件的生命周期/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kun mu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kun mu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">React源码解析3-组件的生命周期</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-21T14:14:45+08:00">
+                2017-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>React 生命周期图示</strong><br><img src="http://blog.cdn.nanamumu.cn/React%20lifecycle.jpg" alt="React lifeCycle"><br>React 的整个生命周期的流程图大致就是这样。<br>生命周期的流程可以描述为这几个阶段：</p>
+<h4 id="Initialization-amp-mounting"><a href="#Initialization-amp-mounting" class="headerlink" title="Initialization &amp; mounting"></a>Initialization &amp; mounting</h4><ul>
+<li>getDefaultProps</li>
+<li>getInitalState</li>
+<li>componentWillMount</li>
+<li>render</li>
+<li>componentDidMount</li>
+</ul>
+<h4 id="State-Change-amp-Props-Chnage"><a href="#State-Change-amp-Props-Chnage" class="headerlink" title="State Change &amp; Props Chnage"></a>State Change &amp; Props Chnage</h4><a id="more"></a>
+<ul>
+<li>State Chagne<ul>
+<li>Upate State</li>
+<li>ShouldComponentUpdate</li>
+<li>ComponentWillUpdate</li>
+<li>render</li>
+<li>componentDidUpdate</li>
+</ul>
+</li>
+<li>Props Change<ul>
+<li>update props </li>
+<li>componentWillRecivesProps</li>
+<li>shouldComponentWillUpate</li>
+<li>render</li>
+<li>componentDidUpdate</li>
+</ul>
+</li>
+</ul>
+<h4 id="Unmounting"><a href="#Unmounting" class="headerlink" title="Unmounting"></a>Unmounting</h4><ul>
+<li>unmounting</li>
+<li>componentWillMount</li>
+</ul>
+<h5 id="1、Intitallzation"><a href="#1、Intitallzation" class="headerlink" title="1、Intitallzation"></a>1、Intitallzation</h5><p> 在上一章节的源码分析中，我们发现在 React.createClass中调用了getDefaultProps和getInitalState，在每次创建React组件时候都会进行调用且只调用一次。<br> mountComponent类负责对生命周期的initialization 和 mounting进行管理，即管理getDefaultProps 、getInitalState、componentWillMount、render、componentDidMount。<br> React生命周期其实也涉及到很多React DOM渲染相关的逻辑代码，由于有不同component的代码比较多，我只用典型的ReactCompositeComponent来分析。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br></pre></td><td class="code"><pre><span class="line"> /**</span><br><span class="line"> * Initializes the component, renders markup, and registers event listeners.</span><br><span class="line"> *</span><br><span class="line"> * @param &#123;ReactReconcileTransaction|ReactServerRenderingTransaction&#125; transaction</span><br><span class="line"> * @param &#123;?object&#125; hostParent</span><br><span class="line"> * @param &#123;?object&#125; hostContainerInfo</span><br><span class="line"> * @param &#123;?object&#125; context</span><br><span class="line"> * @return &#123;?string&#125; Rendered markup to be inserted into the DOM.</span><br><span class="line"> * @final</span><br><span class="line"> * @internal</span><br><span class="line"> */</span><br><span class="line">mountComponent: function(</span><br><span class="line">  transaction,</span><br><span class="line">  hostParent,</span><br><span class="line">  hostContainerInfo,</span><br><span class="line">  context</span><br><span class="line">) &#123;</span><br><span class="line">  this._context = context;</span><br><span class="line">  this._mountOrder = nextMountID++;</span><br><span class="line">  this._hostParent = hostParent;</span><br><span class="line">  this._hostContainerInfo = hostContainerInfo;</span><br><span class="line"></span><br><span class="line">  var publicProps = this._currentElement.props;</span><br><span class="line">  var publicContext = this._processContext(context);</span><br><span class="line"></span><br><span class="line">  var Component = this._currentElement.type;</span><br><span class="line"></span><br><span class="line">  var updateQueue = transaction.getUpdateQueue();</span><br><span class="line"></span><br><span class="line">  // Initialize the public class</span><br><span class="line">  var doConstruct = shouldConstruct(Component);</span><br><span class="line">  var inst = this._constructComponent(</span><br><span class="line">    doConstruct,</span><br><span class="line">    publicProps,</span><br><span class="line">    publicContext,</span><br><span class="line">    updateQueue</span><br><span class="line">  );</span><br><span class="line">  var renderedElement;</span><br><span class="line"></span><br><span class="line">  // Support functional components</span><br><span class="line">  if (!doConstruct &amp;&amp; (inst == null || inst.render == null)) &#123;</span><br><span class="line">    renderedElement = inst;</span><br><span class="line">    if (__DEV__) &#123;</span><br><span class="line">      warning(</span><br><span class="line">        !Component.childContextTypes,</span><br><span class="line">        &apos;%s(...): childContextTypes cannot be defined on a functional component.&apos;,</span><br><span class="line">        Component.displayName || Component.name || &apos;Component&apos;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    invariant(</span><br><span class="line">      inst === null ||</span><br><span class="line">      inst === false ||</span><br><span class="line">      React.isValidElement(inst),</span><br><span class="line">      &apos;%s(...): A valid React element (or null) must be returned. You may have &apos; +</span><br><span class="line">      &apos;returned undefined, an array or some other invalid object.&apos;,</span><br><span class="line">      Component.displayName || Component.name || &apos;Component&apos;</span><br><span class="line">    );</span><br><span class="line">    inst = new StatelessComponent(Component);</span><br><span class="line">    this._compositeType = ReactCompositeComponentTypes.StatelessFunctional;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    if (isPureComponent(Component)) &#123;</span><br><span class="line">      this._compositeType = ReactCompositeComponentTypes.PureClass;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      this._compositeType = ReactCompositeComponentTypes.ImpureClass;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    // This will throw later in _renderValidatedComponent, but add an early</span><br><span class="line">    // warning now to help debugging</span><br><span class="line">    if (inst.render == null) &#123;</span><br><span class="line">      warning(</span><br><span class="line">        false,</span><br><span class="line">        &apos;%s(...): No `render` method found on the returned component &apos; +</span><br><span class="line">        &apos;instance: you may have forgotten to define `render`.&apos;,</span><br><span class="line">        Component.displayName || Component.name || &apos;Component&apos;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    var propsMutated = inst.props !== publicProps;</span><br><span class="line">    var componentName =</span><br><span class="line">      Component.displayName || Component.name || &apos;Component&apos;;</span><br><span class="line"></span><br><span class="line">    warning(</span><br><span class="line">      inst.props === undefined || !propsMutated,</span><br><span class="line">      &apos;%s(...): When calling super() in `%s`, make sure to pass &apos; +</span><br><span class="line">      &apos;up the same props that your component\&apos;s constructor was passed.&apos;,</span><br><span class="line">      componentName, componentName</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // These should be set up in the constructor, but as a convenience for</span><br><span class="line">  // simpler class abstractions, we set them up after the fact.</span><br><span class="line">  inst.props = publicProps;</span><br><span class="line">  inst.context = publicContext;</span><br><span class="line">  inst.refs = emptyObject;</span><br><span class="line">  inst.updater = updateQueue;</span><br><span class="line"></span><br><span class="line">  this._instance = inst;</span><br><span class="line"></span><br><span class="line">  // Store a reference from the instance back to the internal representation</span><br><span class="line">  ReactInstanceMap.set(inst, this);</span><br><span class="line"></span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    // Since plain JS classes are defined without any special initialization</span><br><span class="line">    // logic, we can not catch common errors early. Therefore, we have to</span><br><span class="line">    // catch them here, at initialization time, instead.</span><br><span class="line">    warning(</span><br><span class="line">      !inst.getInitialState ||</span><br><span class="line">      inst.getInitialState.isReactClassApproved ||</span><br><span class="line">      inst.state,</span><br><span class="line">      &apos;getInitialState was defined on %s, a plain JavaScript class. &apos; +</span><br><span class="line">      &apos;This is only supported for classes created using React.createClass. &apos; +</span><br><span class="line">      &apos;Did you mean to define a state property instead?&apos;,</span><br><span class="line">      this.getName() || &apos;a component&apos;</span><br><span class="line">    );</span><br><span class="line">    warning(</span><br><span class="line">      !inst.getDefaultProps ||</span><br><span class="line">      inst.getDefaultProps.isReactClassApproved,</span><br><span class="line">      &apos;getDefaultProps was defined on %s, a plain JavaScript class. &apos; +</span><br><span class="line">      &apos;This is only supported for classes created using React.createClass. &apos; +</span><br><span class="line">      &apos;Use a static property to define defaultProps instead.&apos;,</span><br><span class="line">      this.getName() || &apos;a component&apos;</span><br><span class="line">    );</span><br><span class="line">    warning(</span><br><span class="line">      !inst.propTypes,</span><br><span class="line">      &apos;propTypes was defined as an instance property on %s. Use a static &apos; +</span><br><span class="line">      &apos;property to define propTypes instead.&apos;,</span><br><span class="line">      this.getName() || &apos;a component&apos;</span><br><span class="line">    );</span><br><span class="line">    warning(</span><br><span class="line">      !inst.contextTypes,</span><br><span class="line">      &apos;contextTypes was defined as an instance property on %s. Use a &apos; +</span><br><span class="line">      &apos;static property to define contextTypes instead.&apos;,</span><br><span class="line">      this.getName() || &apos;a component&apos;</span><br><span class="line">    );</span><br><span class="line">    warning(</span><br><span class="line">      typeof inst.componentShouldUpdate !== &apos;function&apos;,</span><br><span class="line">      &apos;%s has a method called &apos; +</span><br><span class="line">      &apos;componentShouldUpdate(). Did you mean shouldComponentUpdate()? &apos; +</span><br><span class="line">      &apos;The name is phrased as a question because the function is &apos; +</span><br><span class="line">      &apos;expected to return a value.&apos;,</span><br><span class="line">      (this.getName() || &apos;A component&apos;)</span><br><span class="line">    );</span><br><span class="line">    warning(</span><br><span class="line">      typeof inst.componentDidUnmount !== &apos;function&apos;,</span><br><span class="line">      &apos;%s has a method called &apos; +</span><br><span class="line">      &apos;componentDidUnmount(). But there is no such lifecycle method. &apos; +</span><br><span class="line">      &apos;Did you mean componentWillUnmount()?&apos;,</span><br><span class="line">      this.getName() || &apos;A component&apos;</span><br><span class="line">    );</span><br><span class="line">    warning(</span><br><span class="line">      typeof inst.componentWillRecieveProps !== &apos;function&apos;,</span><br><span class="line">      &apos;%s has a method called &apos; +</span><br><span class="line">      &apos;componentWillRecieveProps(). Did you mean componentWillReceiveProps()?&apos;,</span><br><span class="line">      (this.getName() || &apos;A component&apos;)</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var initialState = inst.state;</span><br><span class="line">  if (initialState === undefined) &#123;</span><br><span class="line">    inst.state = initialState = null;</span><br><span class="line">  &#125;</span><br><span class="line">  invariant(</span><br><span class="line">    typeof initialState === &apos;object&apos; &amp;&amp; !Array.isArray(initialState),</span><br><span class="line">    &apos;%s.state: must be set to an object or null&apos;,</span><br><span class="line">    this.getName() || &apos;ReactCompositeComponent&apos;</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  this._pendingStateQueue = null;</span><br><span class="line">  this._pendingReplaceState = false;</span><br><span class="line">  this._pendingForceUpdate = false;</span><br><span class="line"></span><br><span class="line">  if (inst.componentWillMount) &#123;</span><br><span class="line">    if (__DEV__) &#123;</span><br><span class="line">      measureLifeCyclePerf(</span><br><span class="line">        () =&gt; inst.componentWillMount(),</span><br><span class="line">        this._debugID,</span><br><span class="line">        &apos;componentWillMount&apos;</span><br><span class="line">      );</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      inst.componentWillMount();</span><br><span class="line">    &#125;</span><br><span class="line">    // When mounting, calls to `setState` by `componentWillMount` will set</span><br><span class="line">    // `this._pendingStateQueue` without triggering a re-render.</span><br><span class="line">    if (this._pendingStateQueue) &#123;</span><br><span class="line">      inst.state = this._processPendingState(inst.props, inst.context);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var markup;</span><br><span class="line">  if (inst.unstable_handleError) &#123;</span><br><span class="line">    markup = this.performInitialMountWithErrorHandling(</span><br><span class="line">      renderedElement,</span><br><span class="line">      hostParent,</span><br><span class="line">      hostContainerInfo,</span><br><span class="line">      transaction,</span><br><span class="line">      context</span><br><span class="line">    );</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    markup = this.performInitialMount(</span><br><span class="line">      renderedElement,</span><br><span class="line">      hostParent,</span><br><span class="line">      hostContainerInfo,</span><br><span class="line">      transaction,</span><br><span class="line">      context</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (inst.componentDidMount) &#123;</span><br><span class="line">    if (__DEV__) &#123;</span><br><span class="line">      transaction.getReactMountReady().enqueue(() =&gt; &#123;</span><br><span class="line">        measureLifeCyclePerf(</span><br><span class="line">          () =&gt; inst.componentDidMount(),</span><br><span class="line">          this._debugID,</span><br><span class="line">          &apos;componentDidMount&apos;</span><br><span class="line">        );</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // setState callbacks during willMount should end up here</span><br><span class="line">  const callbacks = this._pendingCallbacks;</span><br><span class="line">  if (callbacks) &#123;</span><br><span class="line">    this._pendingCallbacks = null;</span><br><span class="line">    for (let i = 0; i &lt; callbacks.length; i++) &#123;</span><br><span class="line">      transaction.getReactMountReady().enqueue(</span><br><span class="line">        callbacks[i],</span><br><span class="line">        inst</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return markup;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码中我们可以看到<br>mountComponent先做实例对象的props,state等初始化，然后调用performInitialMount初始化挂载，完成后调用componentDidMount。<br>代码中需要注意的是返回的markup为performInitialMountWithErrorHandling 和 performInitialMount生成。<br>performInitialMountWithErrorHandling 中也是运用了performInitialMount。<br>再来看performInitialMount的源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">performInitialMount: function(</span><br><span class="line">  renderedElement,</span><br><span class="line">  hostParent,</span><br><span class="line">  hostContainerInfo,</span><br><span class="line">  transaction,</span><br><span class="line">  context</span><br><span class="line">) &#123;</span><br><span class="line">  // If not a stateless component, we now render</span><br><span class="line">  if (renderedElement === undefined) &#123;</span><br><span class="line">    renderedElement = this._renderValidatedComponent();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var nodeType = ReactNodeTypes.getType(renderedElement);</span><br><span class="line">  this._renderedNodeType = nodeType;</span><br><span class="line">  var child = this._instantiateReactComponent(</span><br><span class="line">    renderedElement,</span><br><span class="line">    nodeType !== ReactNodeTypes.EMPTY /* shouldHaveDebugID */</span><br><span class="line">  );</span><br><span class="line">  this._renderedComponent = child;</span><br><span class="line"></span><br><span class="line">  var debugID = 0;</span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    debugID = this._debugID;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var markup = ReactReconciler.mountComponent(</span><br><span class="line">    child,</span><br><span class="line">    transaction,</span><br><span class="line">    hostParent,</span><br><span class="line">    hostContainerInfo,</span><br><span class="line">    this._processChildContext(context),</span><br><span class="line">    debugID</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    if (debugID !== 0) &#123;</span><br><span class="line">      var childDebugIDs = child._debugID !== 0 ? [child._debugID] : [];</span><br><span class="line">      ReactInstrumentation.debugTool.onSetChildren(debugID, childDebugIDs);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return markup;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>performInitialMount中先调用componentWillMount()，再将setState()产生的state改变进行state合并，然后调用_renderValidatedComponent()返回ReactElement，它会调用render()方法。然后由ReactElement创建ReactComponent。最后进行递归渲染。</p>
+<p>由于递归的特性，父组件的 componentWillMount 一定在其子组件的 componentWillMount 之前调用，而父组件的 componentDidMount 肯定在其子组件的 componentDidMount 之后调用。</p>
+<p>当渲染完成之后，若存在 componentDidMount 则触发</p>
+<h5 id="2-Update"><a href="#2-Update" class="headerlink" title="2 Update"></a>2 Update</h5><p>updateComponent 负责管理生命周期中的 componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、render 和 componentDidUpdate。<br>我们其实是用setState来更新组件，也就是通过updateComponent来对组件进行更新。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Perform an update to a mounted component. The componentWillReceiveProps and</span><br><span class="line"> * shouldComponentUpdate methods are called, then (assuming the update isn&apos;t</span><br><span class="line"> * skipped) the remaining update lifecycle methods are called and the DOM</span><br><span class="line"> * representation is updated.</span><br><span class="line"> *</span><br><span class="line"> * By default, this implements React&apos;s rendering and reconciliation algorithm.</span><br><span class="line"> * Sophisticated clients may wish to override this.</span><br><span class="line"> *</span><br><span class="line"> * @param &#123;ReactReconcileTransaction&#125; transaction</span><br><span class="line"> * @param &#123;ReactElement&#125; prevParentElement</span><br><span class="line"> * @param &#123;ReactElement&#125; nextParentElement</span><br><span class="line"> * @internal</span><br><span class="line"> * @overridable</span><br><span class="line"> */</span><br><span class="line">updateComponent: function(</span><br><span class="line">  transaction,</span><br><span class="line">  prevParentElement,</span><br><span class="line">  nextParentElement,</span><br><span class="line">  prevUnmaskedContext,</span><br><span class="line">  nextUnmaskedContext</span><br><span class="line">) &#123;</span><br><span class="line">  var inst = this._instance;</span><br><span class="line">  invariant(</span><br><span class="line">    inst != null,</span><br><span class="line">    &apos;Attempted to update component `%s` that has already been unmounted &apos; +</span><br><span class="line">    &apos;(or failed to mount).&apos;,</span><br><span class="line">    this.getName() || &apos;ReactCompositeComponent&apos;</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  var willReceive = false;</span><br><span class="line">  var nextContext;</span><br><span class="line"></span><br><span class="line">  // Determine if the context has changed or not</span><br><span class="line">  if (this._context === nextUnmaskedContext) &#123;</span><br><span class="line">    nextContext = inst.context;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    nextContext = this._processContext(nextUnmaskedContext);</span><br><span class="line">    willReceive = true;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var prevProps = prevParentElement.props;</span><br><span class="line">  var nextProps = nextParentElement.props;</span><br><span class="line"></span><br><span class="line">  // Not a simple state update but a props update</span><br><span class="line">  if (prevParentElement !== nextParentElement) &#123;</span><br><span class="line">    willReceive = true;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // An update here will schedule an update but immediately set</span><br><span class="line">  // _pendingStateQueue which will ensure that any state updates gets</span><br><span class="line">  // immediately reconciled instead of waiting for the next batch.</span><br><span class="line">  if (willReceive &amp;&amp; inst.componentWillReceiveProps) &#123;</span><br><span class="line">    const beforeState = inst.state;</span><br><span class="line">    if (__DEV__) &#123;</span><br><span class="line">      measureLifeCyclePerf(</span><br><span class="line">        () =&gt; inst.componentWillReceiveProps(nextProps, nextContext),</span><br><span class="line">        this._debugID,</span><br><span class="line">        &apos;componentWillReceiveProps&apos;,</span><br><span class="line">      );</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      inst.componentWillReceiveProps(nextProps, nextContext);</span><br><span class="line">    &#125;</span><br><span class="line">    const afterState = inst.state;</span><br><span class="line">    if (beforeState !== afterState) &#123;</span><br><span class="line">      inst.state = beforeState;</span><br><span class="line">      inst.updater.enqueueReplaceState(inst, afterState);</span><br><span class="line">      if (__DEV__) &#123;</span><br><span class="line">        warning(</span><br><span class="line">          false,</span><br><span class="line">          &apos;%s.componentWillReceiveProps(): Assigning directly to &apos; +</span><br><span class="line">          &apos;this.state is deprecated (except inside a component\&apos;s &apos; +</span><br><span class="line">          &apos;constructor). Use setState instead.&apos;,</span><br><span class="line">          this.getName() || &apos;ReactCompositeComponent&apos;</span><br><span class="line">        );</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // If updating happens to enqueue any new updates, we shouldn&apos;t execute new</span><br><span class="line">  // callbacks until the next render happens, so stash the callbacks first.</span><br><span class="line">  var callbacks = this._pendingCallbacks;</span><br><span class="line">  this._pendingCallbacks = null;</span><br><span class="line"></span><br><span class="line">  var nextState = this._processPendingState(nextProps, nextContext);</span><br><span class="line">  var shouldUpdate = true;</span><br><span class="line">  if (!this._pendingForceUpdate) &#123;</span><br><span class="line">    var prevState = inst.state;</span><br><span class="line">    shouldUpdate = willReceive || nextState !== prevState;</span><br><span class="line">    if (inst.shouldComponentUpdate) &#123;</span><br><span class="line">      if (__DEV__) &#123;</span><br><span class="line">        shouldUpdate = measureLifeCyclePerf(</span><br><span class="line">          () =&gt; inst.shouldComponentUpdate(nextProps, nextState, nextContext),</span><br><span class="line">          this._debugID,</span><br><span class="line">          &apos;shouldComponentUpdate&apos;</span><br><span class="line">        );</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        shouldUpdate = inst.shouldComponentUpdate(nextProps, nextState, nextContext);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      if (this._compositeType === ReactCompositeComponentTypes.PureClass) &#123;</span><br><span class="line">        shouldUpdate =</span><br><span class="line">          !shallowEqual(prevProps, nextProps) ||</span><br><span class="line">          !shallowEqual(inst.state, nextState);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    warning(</span><br><span class="line">      shouldUpdate !== undefined,</span><br><span class="line">      &apos;%s.shouldComponentUpdate(): Returned undefined instead of a &apos; +</span><br><span class="line">      &apos;boolean value. Make sure to return true or false.&apos;,</span><br><span class="line">      this.getName() || &apos;ReactCompositeComponent&apos;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this._updateBatchNumber = null;</span><br><span class="line">  if (shouldUpdate) &#123;</span><br><span class="line">    this._pendingForceUpdate = false;</span><br><span class="line">    // Will set `this.props`, `this.state` and `this.context`.</span><br><span class="line">    this._performComponentUpdate(</span><br><span class="line">      nextParentElement,</span><br><span class="line">      nextProps,</span><br><span class="line">      nextState,</span><br><span class="line">      nextContext,</span><br><span class="line">      transaction,</span><br><span class="line">      nextUnmaskedContext</span><br><span class="line">    );</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    // If it&apos;s determined that a component should not update, we still want</span><br><span class="line">    // to set props and state but we shortcut the rest of the update.</span><br><span class="line">    this._currentElement = nextParentElement;</span><br><span class="line">    this._context = nextUnmaskedContext;</span><br><span class="line">    inst.props = nextProps;</span><br><span class="line">    inst.state = nextState;</span><br><span class="line">    inst.context = nextContext;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (callbacks) &#123;</span><br><span class="line">    for (var j = 0; j &lt; callbacks.length; j++) &#123;</span><br><span class="line">      transaction.getReactMountReady().enqueue(</span><br><span class="line">        callbacks[j],</span><br><span class="line">        this.getPublicInstance()</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p> 代码中调用 shouldComponentUpdate 判断是否需要进行组件更新，如果存在 componentWillUpdate，则执行。<br>updateComponent 本质上也是通过 递归渲染内容的哦。</p>
+<p>当渲染完成之后，若存在 componentDidUpdate就进行触发。</p>
+<h5 id="3-Unmounting"><a href="#3-Unmounting" class="headerlink" title="3 Unmounting"></a>3 Unmounting</h5><p>更新组件时，如果不满足DOM diff条件，会先unmountComponent, 然后再mountComponent，<br>unmountComponent通过调用componentWillUnmount<br>并且递归调用unmountComponent来销毁组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Releases any resources allocated by `mountComponent`.</span><br><span class="line"> *</span><br><span class="line"> * @final</span><br><span class="line"> * @internal</span><br><span class="line"> */</span><br><span class="line">unmountComponent: function(safely, skipLifecycle) &#123;</span><br><span class="line">  if (!this._renderedComponent) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var inst = this._instance;</span><br><span class="line"></span><br><span class="line">  if (inst.componentWillUnmount &amp;&amp; !inst._calledComponentWillUnmount) &#123;</span><br><span class="line">    inst._calledComponentWillUnmount = true;</span><br><span class="line"></span><br><span class="line">    if (safely) &#123;</span><br><span class="line">      if (!skipLifecycle) &#123;</span><br><span class="line">        var name = this.getName() + &apos;.componentWillUnmount()&apos;;</span><br><span class="line">        ReactErrorUtils.invokeGuardedCallbackAndCatchFirstError(name, inst.componentWillUnmount, inst);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      if (__DEV__) &#123;</span><br><span class="line">        measureLifeCyclePerf(</span><br><span class="line">          () =&gt; inst.componentWillUnmount(),</span><br><span class="line">          this._debugID,</span><br><span class="line">          &apos;componentWillUnmount&apos;</span><br><span class="line">        );</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        inst.componentWillUnmount();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (this._renderedComponent) &#123;</span><br><span class="line">    ReactReconciler.unmountComponent(</span><br><span class="line">      this._renderedComponent,</span><br><span class="line">      safely,</span><br><span class="line">      skipLifecycle</span><br><span class="line">    );</span><br><span class="line">    this._renderedNodeType = null;</span><br><span class="line">    this._renderedComponent = null;</span><br><span class="line">    this._instance = null;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Reset pending fields</span><br><span class="line">  // Even if this component is scheduled for another update in ReactUpdates,</span><br><span class="line">  // it would still be ignored because these fields are reset.</span><br><span class="line">  this._pendingStateQueue = null;</span><br><span class="line">  this._pendingReplaceState = false;</span><br><span class="line">  this._pendingForceUpdate = false;</span><br><span class="line">  this._pendingCallbacks = null;</span><br><span class="line">  this._pendingElement = null;</span><br><span class="line"></span><br><span class="line">  // These fields do not really need to be reset since this object is no</span><br><span class="line">  // longer accessible.</span><br><span class="line">  this._context = null;</span><br><span class="line">  this._rootNodeID = 0;</span><br><span class="line">  this._topLevelWrapper = null;</span><br><span class="line"></span><br><span class="line">  // Delete the reference from the instance to this internal representation</span><br><span class="line">  // which allow the internals to be properly cleaned up even if the user</span><br><span class="line">  // leaks a reference to the public instance.</span><br><span class="line">  ReactInstanceMap.remove(inst);</span><br><span class="line"></span><br><span class="line">  // Some existing components rely on inst.props even after they&apos;ve been</span><br><span class="line">  // destroyed (in event handlers).</span><br><span class="line">  // TODO: inst.props = null;</span><br><span class="line">  // TODO: inst.state = null;</span><br><span class="line">  // TODO: inst.context = null;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React/" rel="tag"># React</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/20/React源码分析2-Component创建流程/" rel="next" title="React源码分析2-Component创建流程">
+                <i class="fa fa-chevron-left"></i> React源码分析2-Component创建流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/29/React渲染流程/" rel="prev" title="React渲染流程">
+                React渲染流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">kun mu</p>
+              <p class="site-description motion-element" itemprop="description">我们的感官对于任何新的印象,不论是温和的或猛烈的,悲哀的或愉快的,一定得尝试了多次才会习惯. ——《基督山伯爵》</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Initialization-amp-mounting"><span class="nav-number">1.</span> <span class="nav-text">Initialization &amp; mounting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#State-Change-amp-Props-Chnage"><span class="nav-number">2.</span> <span class="nav-text">State Change &amp; Props Chnage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Unmounting"><span class="nav-number">3.</span> <span class="nav-text">Unmounting</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、Intitallzation"><span class="nav-number">3.1.</span> <span class="nav-text">1、Intitallzation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-Update"><span class="nav-number">3.2.</span> <span class="nav-text">2 Update</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-Unmounting"><span class="nav-number">3.3.</span> <span class="nav-text">3 Unmounting</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kun mu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

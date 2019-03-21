@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="React,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="React 源码分析之Component创建流程在ES6中，React组件的生命必须是大写开头的，这也是为了和传统html标签区分开。 React创建Component的常用方式 如果我们没有使用ES6的话我们通常使用React.createClass来创建组件。   比如：   1234567var React = require(&amp;apos;react&amp;apos;)    var MyCom">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React源码分析2-Component创建流程">
+<meta property="og:url" content="http://yoursite.com/2017/06/20/React源码分析2-Component创建流程/index.html">
+<meta property="og:site_name" content="kun mu&#39;s blog">
+<meta property="og:description" content="React 源码分析之Component创建流程在ES6中，React组件的生命必须是大写开头的，这也是为了和传统html标签区分开。 React创建Component的常用方式 如果我们没有使用ES6的话我们通常使用React.createClass来创建组件。   比如：   1234567var React = require(&amp;apos;react&amp;apos;)    var MyCom">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-21T15:03:50.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React源码分析2-Component创建流程">
+<meta name="twitter:description" content="React 源码分析之Component创建流程在ES6中，React组件的生命必须是大写开头的，这也是为了和传统html标签区分开。 React创建Component的常用方式 如果我们没有使用ES6的话我们通常使用React.createClass来创建组件。   比如：   1234567var React = require(&amp;apos;react&amp;apos;)    var MyCom">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/20/React源码分析2-Component创建流程/">
+
+
+
+
+
+  <title>React源码分析2-Component创建流程 | kun mu's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kun mu's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">全栈之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/20/React源码分析2-Component创建流程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kun mu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kun mu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">React源码分析2-Component创建流程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-20T17:49:26+08:00">
+                2017-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="React-源码分析之Component创建流程"><a href="#React-源码分析之Component创建流程" class="headerlink" title="React 源码分析之Component创建流程"></a>React 源码分析之Component创建流程</h3><p>在ES6中，React组件的生命必须是大写开头的，这也是为了和传统html标签区分开。</p>
+<h4 id="React创建Component的常用方式"><a href="#React创建Component的常用方式" class="headerlink" title="React创建Component的常用方式"></a>React创建Component的常用方式</h4><ul>
+<li><p>如果我们没有使用ES6的话我们通常使用React.createClass来创建组件。</p>
+<p>  比如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var React = require(&apos;react&apos;)</span><br><span class="line">    var MyComponent = React.createClass(&#123;</span><br><span class="line">        //propTypes</span><br><span class="line">        //initialState</span><br><span class="line">        //render</span><br><span class="line">    &#125;)</span><br><span class="line">    module.exoprt = MyComponent</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>ES6中我们使用React.Component来创建组件<br> 比如： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var MyComponent extents React.Component(&#123;</span><br><span class="line">    //constructor(props) </span><br><span class="line">    //lifeCycle</span><br><span class="line">    //render</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>通常我们需要在render函数中去构建我们的html dom结构。 在render函数中返回的是一个React Component对象。</strong><br>接口定义如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReactComponent render( ReactElement element, DOMElement container, [function callback] )</span><br></pre></td></tr></table></figure></p>
+<h4 id="ReactElement"><a href="#ReactElement" class="headerlink" title="ReactElement"></a>ReactElement</h4><p>在ReactElement中我们着重解读createElement方法</p>
+<p> 下面我们来看一下cerateElement的源码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Clone and return a new ReactElement using element as the starting point.</span><br><span class="line"> * See https://facebook.github.io/react/docs/react-api.html#cloneelement</span><br><span class="line"> */</span><br><span class="line">ReactElement.cloneElement = function(element, config, children) &#123;</span><br><span class="line">  var propName;</span><br><span class="line"></span><br><span class="line">  // Original props are copied</span><br><span class="line">  var props = Object.assign(&#123;&#125;, element.props);</span><br><span class="line"></span><br><span class="line">  // Reserved names are extracted</span><br><span class="line">  var key = element.key;</span><br><span class="line">  var ref = element.ref;</span><br><span class="line">  // Self is preserved since the owner is preserved.</span><br><span class="line">  var self = element._self;</span><br><span class="line">  // Source is preserved since cloneElement is unlikely to be targeted by a</span><br><span class="line">  // transpiler, and the original source is probably a better indicator of the</span><br><span class="line">  // true owner.</span><br><span class="line">  var source = element._source;</span><br><span class="line"></span><br><span class="line">  // Owner will be preserved, unless ref is overridden</span><br><span class="line">  var owner = element._owner;</span><br><span class="line"></span><br><span class="line">  if (config != null) &#123;</span><br><span class="line">    if (hasValidRef(config)) &#123;</span><br><span class="line">      // Silently steal the ref from the parent.</span><br><span class="line">      ref = config.ref;</span><br><span class="line">      owner = ReactCurrentOwner.current;</span><br><span class="line">    &#125;</span><br><span class="line">    if (hasValidKey(config)) &#123;</span><br><span class="line">      key = &apos;&apos; + config.key;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Remaining properties override existing props</span><br><span class="line">    var defaultProps;</span><br><span class="line">    if (element.type &amp;&amp; element.type.defaultProps) &#123;</span><br><span class="line">      defaultProps = element.type.defaultProps;</span><br><span class="line">    &#125;</span><br><span class="line">    for (propName in config) &#123;</span><br><span class="line">      if (hasOwnProperty.call(config, propName) &amp;&amp;</span><br><span class="line">          !RESERVED_PROPS.hasOwnProperty(propName)) &#123;</span><br><span class="line">        if (config[propName] === undefined &amp;&amp; defaultProps !== undefined) &#123;</span><br><span class="line">          // Resolve default props</span><br><span class="line">          props[propName] = defaultProps[propName];</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          props[propName] = config[propName];</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Children can be more than one argument, and those are transferred onto</span><br><span class="line">  // the newly allocated props object.</span><br><span class="line">  var childrenLength = arguments.length - 2;</span><br><span class="line">  if (childrenLength === 1) &#123;</span><br><span class="line">    props.children = children;</span><br><span class="line">  &#125; else if (childrenLength &gt; 1) &#123;</span><br><span class="line">    var childArray = Array(childrenLength);</span><br><span class="line">    for (var i = 0; i &lt; childrenLength; i++) &#123;</span><br><span class="line">      childArray[i] = arguments[i + 2];</span><br><span class="line">    &#125;</span><br><span class="line">    props.children = childArray;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return ReactElement(</span><br><span class="line">    element.type,</span><br><span class="line">    key,</span><br><span class="line">    ref,</span><br><span class="line">    self,</span><br><span class="line">    source,</span><br><span class="line">    owner,</span><br><span class="line">    props</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>type参数应该是dom标签 ，<br>在ReactElement.createElement中通过config提取出component的相关的系列属性 ： key props refs等。<br>以及props中的children 。 <br>最后返回一个ReactElement对象<br>当然，ReactElement中也提供了cloneElement方法。再此不做介绍。<br>通过查看ReactElement的源码，我们发现，创建一个component的过程可以简述为以下步骤</p>
+<ul>
+<li>提取传入的config放入key props refs等</li>
+<li>处理children</li>
+<li>Resolve default props</li>
+<li>返回一个ReactElement对象。并初始化其中的变量props 等<br>综上所述，我们可以看出ReactElement有4个属性：type，ref，key，props是一个虚拟化的DOM元素。</li>
+</ul>
+<h4 id="ReactClass"><a href="#ReactClass" class="headerlink" title="ReactClass"></a>ReactClass</h4><p>前面说过，我们创建component时候通过React.createClass来创建。createClass 就是React Component的构造函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">createClass: function(spec) &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>spec是一个object ，我们创建component的时候也是要必须传入render方法。在render中我们返回的字符串用来构建虚拟DOM。</p>
+<p>下面我们主要分析下createClass方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Creates a composite component class given a class specification.</span><br><span class="line"> * See https://facebook.github.io/react/docs/react-api.html#createclass</span><br><span class="line"> *</span><br><span class="line"> * @param &#123;object&#125; spec Class specification (which must define `render`).</span><br><span class="line"> * @return &#123;function&#125; Component constructor function.</span><br><span class="line"> * @public</span><br><span class="line"> */</span><br><span class="line">createClass: function(spec) &#123;</span><br><span class="line">  // To keep our warnings more understandable, we&apos;ll use a little hack here to</span><br><span class="line">  // ensure that Constructor.name !== &apos;Constructor&apos;. This makes sure we don&apos;t</span><br><span class="line">  // unnecessarily identify a class without displayName as &apos;Constructor&apos;.</span><br><span class="line">  var Constructor = identity(function(props, context, updater) &#123;</span><br><span class="line">    // This constructor gets overridden by mocks. The argument is used</span><br><span class="line">    // by mocks to assert on what gets mounted.</span><br><span class="line"></span><br><span class="line">    if (__DEV__) &#123;</span><br><span class="line">      warning(</span><br><span class="line">        this instanceof Constructor,</span><br><span class="line">        &apos;Something is calling a React component directly. Use a factory or &apos; +</span><br><span class="line">        &apos;JSX instead. See: https://fb.me/react-legacyfactory&apos;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Wire up auto-binding</span><br><span class="line">    if (this.__reactAutoBindPairs.length) &#123;</span><br><span class="line">      bindAutoBindMethods(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    this.props = props;</span><br><span class="line">    this.context = context;</span><br><span class="line">    this.refs = emptyObject;</span><br><span class="line">    this.updater = updater || ReactNoopUpdateQueue;</span><br><span class="line"></span><br><span class="line">    this.state = null;</span><br><span class="line"></span><br><span class="line">    // ReactClasses doesn&apos;t have constructors. Instead, they use the</span><br><span class="line">    // getInitialState and componentWillMount methods for initialization.</span><br><span class="line"></span><br><span class="line">    var initialState = this.getInitialState ? this.getInitialState() : null;</span><br><span class="line">    if (__DEV__) &#123;</span><br><span class="line">      // We allow auto-mocks to proceed as if they&apos;re returning null.</span><br><span class="line">      if (initialState === undefined &amp;&amp;</span><br><span class="line">          this.getInitialState._isMockFunction) &#123;</span><br><span class="line">        // This is probably bad practice. Consider warning here and</span><br><span class="line">        // deprecating this convenience.</span><br><span class="line">        initialState = null;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    invariant(</span><br><span class="line">      typeof initialState === &apos;object&apos; &amp;&amp; !Array.isArray(initialState),</span><br><span class="line">      &apos;%s.getInitialState(): must return an object or null&apos;,</span><br><span class="line">      Constructor.displayName || &apos;ReactCompositeComponent&apos;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    this.state = initialState;</span><br><span class="line">  &#125;);</span><br><span class="line">  Constructor.prototype = new ReactClassComponent();</span><br><span class="line">  Constructor.prototype.constructor = Constructor;</span><br><span class="line">  Constructor.prototype.__reactAutoBindPairs = [];</span><br><span class="line"></span><br><span class="line">  mixSpecIntoComponent(Constructor, spec);</span><br><span class="line"></span><br><span class="line">  // Initialize the defaultProps property after all mixins have been merged.</span><br><span class="line">  if (Constructor.getDefaultProps) &#123;</span><br><span class="line">    Constructor.defaultProps = Constructor.getDefaultProps();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    // This is a tag to indicate that the use of these method names is ok,</span><br><span class="line">    // since it&apos;s used with createClass. If it&apos;s not, then it&apos;s likely a</span><br><span class="line">    // mistake so we&apos;ll warn you to use the static property, property</span><br><span class="line">    // initializer or constructor respectively.</span><br><span class="line">    if (Constructor.getDefaultProps) &#123;</span><br><span class="line">      Constructor.getDefaultProps.isReactClassApproved = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    if (Constructor.prototype.getInitialState) &#123;</span><br><span class="line">      Constructor.prototype.getInitialState.isReactClassApproved = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  invariant(</span><br><span class="line">    Constructor.prototype.render,</span><br><span class="line">    &apos;createClass(...): Class specification must implement a `render` method.&apos;</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    warning(</span><br><span class="line">      !Constructor.prototype.componentShouldUpdate,</span><br><span class="line">      &apos;%s has a method called &apos; +</span><br><span class="line">      &apos;componentShouldUpdate(). Did you mean shouldComponentUpdate()? &apos; +</span><br><span class="line">      &apos;The name is phrased as a question because the function is &apos; +</span><br><span class="line">      &apos;expected to return a value.&apos;,</span><br><span class="line">      spec.displayName || &apos;A component&apos;</span><br><span class="line">    );</span><br><span class="line">    warning(</span><br><span class="line">      !Constructor.prototype.componentWillRecieveProps,</span><br><span class="line">      &apos;%s has a method called &apos; +</span><br><span class="line">      &apos;componentWillRecieveProps(). Did you mean componentWillReceiveProps()?&apos;,</span><br><span class="line">      spec.displayName || &apos;A component&apos;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Reduce time spent doing lookups by setting these on the prototype.</span><br><span class="line">  for (var methodName in ReactClassInterface) &#123;</span><br><span class="line">    if (!Constructor.prototype[methodName]) &#123;</span><br><span class="line">      Constructor.prototype[methodName] = null;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return Constructor;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>createClass方法首先定义了一个Constructor构造函数 ，构造函数的prototype指向一个ReactClassComponent的实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Constructor.prototype = new ReactClassComponent();</span><br></pre></td></tr></table></figure>
+<p>在之前的代码有如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var ReactClassComponent = function() &#123;&#125;;</span><br><span class="line">Object.assign(</span><br><span class="line">  ReactClassComponent.prototype,</span><br><span class="line">  ReactComponent.prototype,</span><br><span class="line">  ReactClassMixin</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>显而易见的是拷贝了ReactComponent和ReactClassMixin对象。</p>
+<p>接着获取我们很熟悉的initalState 和 defaultProps</p>
+<p>然后<br>定义了 <strong>reactAutoBindPairs 为一个空数组。<br>先将mixin里面的方法按照key，function内容的顺序成对存入 </strong>reactAutoBindPairs ,</p>
+<p>最后创建一个组件需要定义的方法都在ReactClassInterface上有，当前未定义的方法设置为空，我们就可以通过打印组件的prototype属性清楚地在日志上知道我们有哪些api是未定义的。通过设置未定义的属性为空，可以减少程序查找的时间。有点黑科技的意思。 最后返回Constructor。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React/" rel="tag"># React</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/20/React源码分析1-概述/" rel="next" title="React源码分析1-概述">
+                <i class="fa fa-chevron-left"></i> React源码分析1-概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/21/React源码解析3-组件的生命周期/" rel="prev" title="React源码解析3-组件的生命周期">
+                React源码解析3-组件的生命周期 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">kun mu</p>
+              <p class="site-description motion-element" itemprop="description">我们的感官对于任何新的印象,不论是温和的或猛烈的,悲哀的或愉快的,一定得尝试了多次才会习惯. ——《基督山伯爵》</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#React-源码分析之Component创建流程"><span class="nav-number">1.</span> <span class="nav-text">React 源码分析之Component创建流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#React创建Component的常用方式"><span class="nav-number">1.1.</span> <span class="nav-text">React创建Component的常用方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReactElement"><span class="nav-number">1.2.</span> <span class="nav-text">ReactElement</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReactClass"><span class="nav-number">1.3.</span> <span class="nav-text">ReactClass</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kun mu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Git,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="mac下安装git-flow使用homebrew:brew update ;brew install git-flow 在开始研究Git Flow的具体内容前，下面这张图可以看到模型的全貌（引自nvie的博文)： ## Git Flow中的分支 eit Flow模型中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动；辅助分支组织为了解决特定的问题而进行的各种开发活动。">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitFlow工作流">
+<meta property="og:url" content="http://yoursite.com/2017/02/20/GitFlow工作流/index.html">
+<meta property="og:site_name" content="kun mu&#39;s blog">
+<meta property="og:description" content="mac下安装git-flow使用homebrew:brew update ;brew install git-flow 在开始研究Git Flow的具体内容前，下面这张图可以看到模型的全貌（引自nvie的博文)： ## Git Flow中的分支 eit Flow模型中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动；辅助分支组织为了解决特定的问题而进行的各种开发活动。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://okzqc8h19.bkt.clouddn.com/01YiLAQQnlPV.png">
+<meta property="og:image" content="http://okzqc8h19.bkt.clouddn.com/%E4%B8%BB%E5%88%86%E6%94%AF.png">
+<meta property="og:image" content="http://okzqc8h19.bkt.clouddn.com/%E8%BE%85%E5%8A%A9%E5%88%86%E6%94%AF.png">
+<meta property="og:image" content="http://okzqc8h19.bkt.clouddn.com/hotfix%E5%88%86%E6%94%AF.png">
+<meta property="og:updated_time" content="2019-03-21T15:03:50.122Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitFlow工作流">
+<meta name="twitter:description" content="mac下安装git-flow使用homebrew:brew update ;brew install git-flow 在开始研究Git Flow的具体内容前，下面这张图可以看到模型的全貌（引自nvie的博文)： ## Git Flow中的分支 eit Flow模型中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动；辅助分支组织为了解决特定的问题而进行的各种开发活动。">
+<meta name="twitter:image" content="http://okzqc8h19.bkt.clouddn.com/01YiLAQQnlPV.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/20/GitFlow工作流/">
+
+
+
+
+
+  <title>GitFlow工作流 | kun mu's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kun mu's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">全栈之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/20/GitFlow工作流/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kun mu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kun mu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GitFlow工作流</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-20T17:53:20+08:00">
+                2017-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="mac下安装git-flow"><a href="#mac下安装git-flow" class="headerlink" title="mac下安装git-flow"></a>mac下安装git-flow</h2><p>使用homebrew:<br>brew update ;<br>brew install git-flow</p>
+<p>在开始研究Git Flow的具体内容前，下面这张图可以看到模型的全貌（引自nvie的博文)：<br><img src="http://okzqc8h19.bkt.clouddn.com/01YiLAQQnlPV.png"></p>
+<pre><code>## Git Flow中的分支
+</code></pre><p>eit Flow模型中定义了主分支和辅助分支两类分支。其中主分支用于组织与软件开发、部署相关的活动；辅助分支组织为了解决特定的问题而进行的各种开发活动。<br><a id="more"></a></p>
+<h2 id="主分支"><a href="#主分支" class="headerlink" title="主分支"></a>主分支</h2><p>主分支是所有开发活动的核心分支。所有的开发活动产生的输出物最终都会反映到主分支的代码中。主分支分为master分支和development分支。</p>
+<p><img src="http://okzqc8h19.bkt.clouddn.com/%E4%B8%BB%E5%88%86%E6%94%AF.png"></p>
+<h3 id="master分支"><a href="#master分支" class="headerlink" title="master分支"></a>master分支</h3><p>master分支上存放的应该是随时可供在生产环境中部署的代码（Production Ready state）。当开发活动告一段落，产生了一份新的可供部署的代码时，master分支上的代码会被更新。同时，每一次更新，最好添加对应的版本号标签（TAG）。</p>
+<h3 id="develop分支"><a href="#develop分支" class="headerlink" title="develop分支"></a>develop分支</h3><p>develop分支是保存当前最新开发成果的分支。通常这个分支上的代码也是可进行每日夜间发布的代码（Nightly build）。因此这个分支有时也可以被称作“integration branch”。</p>
+<p>当develop分支上的代码已实现了软件需求说明书中所有的功能，通过了所有的测试后，并且代码已经足够稳定时，就可以将所有的开发成果合并回master分支了。对于master分支上的新提交的代码建议都打上一个新的版本号标签（TAG），供后续代码跟踪使用。</p>
+<p>因此，每次将develop分支上的代码合并回master分支时，我们都可以认为一个新的可供在生产环境中部署的版本就产生了。通常而言，“仅在发布新的可供部署的代码时才更新master分支上的代码”是推荐所有人都遵守的行为准则。基于此，理论上说，每当有代码提交到master分支时，我们可以使用Git Hook触发软件自动测试以及生产环境代码的自动更新工作。这些自动化操作将有利于减少新代码发布之后的一些事务性工作。</p>
+<h2 id="辅助分支"><a href="#辅助分支" class="headerlink" title="辅助分支"></a>辅助分支</h2><p>辅助分支是用于组织解决特定问题的各种软件开发活动的分支。辅助分支主要用于组织软件新功能的并行开发、简化新功能开发代码的跟踪、辅助完成版本发布工作以及对生产代码的缺陷进行紧急修复工作。这些分支与主分支不同，通常只会在有限的时间范围内存在。</p>
+<p>辅助分支包括：</p>
+<p>用于开发新功能时所使用的feature分支；<br>用于辅助版本发布的release分支；<br>用于修正生产代码中的缺陷的hotfix分支。<br>以上这些分支都有固定的使用目的和分支操作限制。从单纯技术的角度说，这些分支与Git其他分支并没有什么区别，但通过命名，我们定义了使用这些分支的方法。</p>
+<h3 id="feature分支"><a href="#feature分支" class="headerlink" title="feature分支"></a>feature分支</h3><p>使用规范：</p>
+<p>可以从develop分支发起feature分支<br>代码必须合并回develop分支<br>feature分支的命名可以使用除master，develop，release-<em>，hotfix-</em>之外的任何名称<br>feature分支（有时也可以被叫做“topic分支”）通常是在开发一项新的软件功能的时候使用，这个分支上的代码变更最终合并回develop分支或者干脆被抛弃掉（例如实验性且效果不好的代码变更）。</p>
+<p>一般而言，feature分支代码可以保存在开发者自己的代码库中而不强制提交到主代码库里。</p>
+<p><img src="http://okzqc8h19.bkt.clouddn.com/%E8%BE%85%E5%8A%A9%E5%88%86%E6%94%AF.png"></p>
+<h3 id="release分支"><a href="#release分支" class="headerlink" title="release分支"></a>release分支</h3><p>使用规范：</p>
+<p>可以从develop分支派生<br>必须合并回develop分支和master分支<br>分支命名惯例：release-*<br>release分支是为发布新的产品版本而设计的。在这个分支上的代码允许做小的缺陷修正、准备发布版本所需的各项说明信息（版本号、发布时间、编译时间等等）。通过在release分支上进行这些工作可以让develop分支空闲出来以接受新的feature分支上的代码提交，进入新的软件开发迭代周期。</p>
+<p>当develop分支上的代码已经包含了所有即将发布的版本中所计划包含的软件功能，并且已通过所有测试时，我们就可以考虑准备创建release分支了。而所有在当前即将发布的版本之外的业务需求一定要确保不能混到release分支之内（避免由此引入一些不可控的系统缺陷）。</p>
+<p>成功的派生了release分支，并被赋予版本号之后，develop分支就可以为“下一个版本”服务了。所谓的“下一个版本”是在当前即将发布的版本之后发布的版本。版本号的命名可以依据项目定义的版本号命名规则进行。</p>
+<h3 id="hotfix分支"><a href="#hotfix分支" class="headerlink" title="hotfix分支"></a>hotfix分支</h3><p>使用规范：</p>
+<p>可以从master分支派生<br>必须合并回master分支和develop分支<br>分支命名惯例：hotfix-*<br>除了是计划外创建的以外，hotfix分支与release分支十分相似：都可以产生一个新的可供在生产环境部署的软件版本。</p>
+<p>当生产环境中的软件遇到了异常情况或者发现了严重到必须立即修复的软件缺陷的时候，就需要从master分支上指定的TAG版本派生hotfix分支来组织代码的紧急修复工作。</p>
+<p>这样做的显而易见的好处是不会打断正在进行的develop分支的开发工作，能够让团队中负责新功能开发的人与负责代码紧急修复的人并行的开展工作。</p>
+<p><img src="http://okzqc8h19.bkt.clouddn.com/hotfix%E5%88%86%E6%94%AF.png"></p>
+<h2 id="Git-Flow-用法示例"><a href="#Git-Flow-用法示例" class="headerlink" title="Git Flow 用法示例"></a>Git Flow 用法示例</h2><p><a href="https://github.com/nvie/gitflow.git" target="_blank" rel="noopener">https://github.com/nvie/gitflow.git</a></p>
+<h4 id="Creating-feature-release-hotfix-support-branches"><a href="#Creating-feature-release-hotfix-support-branches" class="headerlink" title="Creating feature/release/hotfix/support branches"></a>Creating feature/release/hotfix/support branches</h4><p>git flow init </p>
+<h4 id="To-list-start-finish-feature-branches-use"><a href="#To-list-start-finish-feature-branches-use" class="headerlink" title="To list/start/finish feature branches, use:"></a>To list/start/finish feature branches, use:</h4><p>git flow feature<br>git flow feature start <name> [<base>]<br>git flow feature finish <name><br>For feature branches, the <base> arg must be a commit on develop.</name></name></p>
+<h4 id="To-push-pull-a-feature-branch-to-the-remote-repository-use"><a href="#To-push-pull-a-feature-branch-to-the-remote-repository-use" class="headerlink" title="To push/pull a feature branch to the remote repository, use:"></a>To push/pull a feature branch to the remote repository, use:</h4><p>git flow feature publish <name><br>  git flow feature pull <remote> <name></name></remote></name></p>
+<h4 id="To-list-start-finish-release-branches-use"><a href="#To-list-start-finish-release-branches-use" class="headerlink" title="To list/start/finish release branches, use:"></a>To list/start/finish release branches, use:</h4><p>git flow release<br>git flow release start <release> [<base>]<br>git flow release finish <release><br>For release branches, the <base> arg must be a commit on develop.</release></release></p>
+<h4 id="To-list-start-finish-hotfix-branches-use"><a href="#To-list-start-finish-hotfix-branches-use" class="headerlink" title="To list/start/finish hotfix branches, use:"></a>To list/start/finish hotfix branches, use:</h4><p>git flow hotfix<br>git flow hotfix start <release> [<base>]<br>git flow hotfix finish <release><br>For hotfix branches, the <base> arg must be a commit on master.</release></release></p>
+<h4 id="To-list-start-support-branches-use"><a href="#To-list-start-support-branches-use" class="headerlink" title="To list/start support branches, use:"></a>To list/start support branches, use:</h4><p>git flow support<br>git flow support start <release> <base><br>For support branches, the <base> arg must be a commit on master.</release></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/09/组件库/" rel="next" title="整理一些优秀的react ui组件库">
+                <i class="fa fa-chevron-left"></i> 整理一些优秀的react ui组件库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/25/ipcamera视频直播的思路/" rel="prev" title="ipcamera视频直播的思路">
+                ipcamera视频直播的思路 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">kun mu</p>
+              <p class="site-description motion-element" itemprop="description">我们的感官对于任何新的印象,不论是温和的或猛烈的,悲哀的或愉快的,一定得尝试了多次才会习惯. ——《基督山伯爵》</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mac下安装git-flow"><span class="nav-number">1.</span> <span class="nav-text">mac下安装git-flow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主分支"><span class="nav-number">2.</span> <span class="nav-text">主分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#master分支"><span class="nav-number">2.1.</span> <span class="nav-text">master分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#develop分支"><span class="nav-number">2.2.</span> <span class="nav-text">develop分支</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#辅助分支"><span class="nav-number">3.</span> <span class="nav-text">辅助分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#feature分支"><span class="nav-number">3.1.</span> <span class="nav-text">feature分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#release分支"><span class="nav-number">3.2.</span> <span class="nav-text">release分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hotfix分支"><span class="nav-number">3.3.</span> <span class="nav-text">hotfix分支</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-Flow-用法示例"><span class="nav-number">4.</span> <span class="nav-text">Git Flow 用法示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Creating-feature-release-hotfix-support-branches"><span class="nav-number">4.0.1.</span> <span class="nav-text">Creating feature/release/hotfix/support branches</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#To-list-start-finish-feature-branches-use"><span class="nav-number">4.0.2.</span> <span class="nav-text">To list/start/finish feature branches, use:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#To-push-pull-a-feature-branch-to-the-remote-repository-use"><span class="nav-number">4.0.3.</span> <span class="nav-text">To push/pull a feature branch to the remote repository, use:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#To-list-start-finish-release-branches-use"><span class="nav-number">4.0.4.</span> <span class="nav-text">To list/start/finish release branches, use:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#To-list-start-finish-hotfix-branches-use"><span class="nav-number">4.0.5.</span> <span class="nav-text">To list/start/finish hotfix branches, use:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#To-list-start-support-branches-use"><span class="nav-number">4.0.6.</span> <span class="nav-text">To list/start support branches, use:</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kun mu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

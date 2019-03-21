@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="redis,穆坤,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="目前来说，高可用(主从复制、主从切换)redis集群有两种方案，一种是redis-sentinel，只有一个master，各实例数据保持一致；一种是redis-cluster，也叫分布式redis集群，可以有多个master，数据分片分布在这些master上。 根据我们的条件，选择第一种给大家介绍。 Sentinel 介绍Sentinel是Redis的高可用性（HA）解决方案，由一个或多个Sen">
+<meta name="keywords" content="redis,穆坤">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于DOCKER 的Redis Sentinel 高可用集群搭建">
+<meta property="og:url" content="http://yoursite.com/2019/03/19/基于DOCKER-的Redis-Sentinel-高可用集群搭建/index.html">
+<meta property="og:site_name" content="kun mu&#39;s blog">
+<meta property="og:description" content="目前来说，高可用(主从复制、主从切换)redis集群有两种方案，一种是redis-sentinel，只有一个master，各实例数据保持一致；一种是redis-cluster，也叫分布式redis集群，可以有多个master，数据分片分布在这些master上。 根据我们的条件，选择第一种给大家介绍。 Sentinel 介绍Sentinel是Redis的高可用性（HA）解决方案，由一个或多个Sen">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-1104878/rfo7kmzixu.png?imageView2/2/w/1620">
+<meta property="og:image" content="http://blog.cdn.nanamumu.cn/20190319195922.png">
+<meta property="og:image" content="http://blog.cdn.nanamumu.cn/20190319201139.png">
+<meta property="og:updated_time" content="2019-03-21T10:37:50.616Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于DOCKER 的Redis Sentinel 高可用集群搭建">
+<meta name="twitter:description" content="目前来说，高可用(主从复制、主从切换)redis集群有两种方案，一种是redis-sentinel，只有一个master，各实例数据保持一致；一种是redis-cluster，也叫分布式redis集群，可以有多个master，数据分片分布在这些master上。 根据我们的条件，选择第一种给大家介绍。 Sentinel 介绍Sentinel是Redis的高可用性（HA）解决方案，由一个或多个Sen">
+<meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/yehe-1104878/rfo7kmzixu.png?imageView2/2/w/1620">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/19/基于DOCKER-的Redis-Sentinel-高可用集群搭建/">
+
+
+
+
+
+  <title>基于DOCKER 的Redis Sentinel 高可用集群搭建 | kun mu's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kun mu's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">全栈之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/19/基于DOCKER-的Redis-Sentinel-高可用集群搭建/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kun mu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kun mu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于DOCKER 的Redis Sentinel 高可用集群搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-19T14:18:50+08:00">
+                2019-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/redis/" itemprop="url" rel="index">
+                    <span itemprop="name">redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p> 目前来说，高可用(主从复制、主从切换)redis集群有两种方案，一种是redis-sentinel，只有一个master，各实例数据保持一致；一种是redis-cluster，也叫分布式redis集群，可以有多个master，数据分片分布在这些master上。 根据我们的条件，选择第一种给大家介绍。</p>
+<h2 id="Sentinel-介绍"><a href="#Sentinel-介绍" class="headerlink" title="Sentinel 介绍"></a>Sentinel 介绍</h2><p>Sentinel是Redis的高可用性（HA）解决方案，由一个或多个Sentinel实例组成的Sentinel系统可以监视任意多个主服务器，以及这些主服务器属下的所有从服务器，并在被监视的主服务器故障时，自动将下线主服务器属下的某个从服务器升级为新的主服务器，然后由新的主服务器代替已下线的主服务器继续处理命令请求。Redis提供的sentinel（哨兵）机制，通过sentinel模式启动redis后，自动监控master/slave的运行状态，基本原理是：心跳机制+投票裁决</p>
+<h2 id="Sentinel-原理"><a href="#Sentinel-原理" class="headerlink" title="Sentinel 原理"></a>Sentinel 原理</h2><p><img src="https://ask.qcloudimg.com/http-save/yehe-1104878/rfo7kmzixu.png?imageView2/2/w/1620" alt="Sentinel"><br>一个Sentinel 的集群部署，至少需要3个Sentinel实例。另外，redis-sentinel只需要配置监控redis master，而集群之间可以通过master相互通信。<br>redis-sentinel作为独立的服务，用于管理多个redis实例，该系统主要执行以下三个任务：</p>
+<ul>
+<li>监控 (Monitor): 检查redis主、从实例是否正常运作</li>
+<li>通知 (Notification): 监控的redis服务出现问题时，可通过API发送通知告警</li>
+<li>自动故障迁移 (Automatic Failover): 当检测到redis主库不能正常工作时，redis-sentinel会开始做自动故障判断、迁移等操作，先是移除失效redis主服务，然后将其中一个从服务器升级为新的主服务器，并让失效主服务器的其他从服务器改为复制新的主服务器。当客户端试图连接失效的主服务器时，集群也会向客户端返回最新主服务器的地址，使得集群可以使用新的主服务器来代替失效服务器</li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h3><ul>
+<li>docker</li>
+<li>centos</li>
+<li>docker image ： redis  lastest</li>
+</ul>
+<h3 id="安装master-，slave"><a href="#安装master-，slave" class="headerlink" title="安装master ，slave"></a>安装master ，slave</h3><p>使用公司的两台服务器，一台的docker 部署master 另外两台部署slave<br>本博客中 供6个容器 （1个master 2个slave 3个sentinel）</p>
+<ul>
+<li>5.108 做master   并部署Sentinel1</li>
+<li>5.2 做slave  并部署Sentinel2-3</li>
+</ul>
+<h4 id="获取redis镜像"><a href="#获取redis镜像" class="headerlink" title="获取redis镜像"></a>获取redis镜像</h4><pre><code>docker pull redis
+</code></pre><p>在master上使用info Replication查看集群状态<br>注意，为了让redis-sentinel可以发现slave，这里要确保redis服务端口和容器映射端口一致：<br>由于</p>
+<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><h5 id="master"><a href="#master" class="headerlink" title="master"></a>master</h5><pre><code># 统一密码使用123456
+    docker run -it --name redis-6301 -d -p 6301:6301  -v /home/redis/6301:/home/redis/6301 redis redis-server --requirepass redispassword --port 6301
+
+# docker run -it --name redis-master -d -p 6300:6300 redis redis-server --requirepass redispassword --port 6300
+    docker exec -it redis-6301 bash
+    redis-cli -a redispassword -p 6301
+    config set masterauth redispassword
+</code></pre><p>查看状态</p>
+<pre><code>info replication
+</code></pre><h5 id="slave-1"><a href="#slave-1" class="headerlink" title="slave 1"></a>slave 1</h5><pre><code>docker run -it --name redis-6302 -d -p 6302:6302  -v /home/redis/6302:/home/redis/6302 redis redis-server --requirepass redispassword --port 6302
+docker exec -it redis-6302 bash
+redis-cli -a redispassword -p 6302
+#slaveof &lt;master-ip&gt; &lt;master-port&gt;
+slaveof 192.168.5.108 6301
+config set masterauth redispassword
+</code></pre><p>查看状态</p>
+<pre><code>info replication
+</code></pre><h5 id="slave2"><a href="#slave2" class="headerlink" title="slave2"></a>slave2</h5><pre><code>docker run -it --name redis-6303 -d -p 6303:6303  -v /home/redis/6303:/home/redis/6303 redis redis-server --requirepass redispassword --port 6303
+docker exec -it redis-6303 bash
+redis-cli -a redispassword -p 6303
+#slaveof &lt;master-ip&gt; &lt;master-port&gt;
+slaveof 192.168.5.108 6301
+config set masterauth redispassword
+</code></pre><p>查看状态</p>
+<pre><code>info replication
+</code></pre><p>分别进去三个容器</p>
+<pre><code>docker exec -it redis-[x] bash
+redis-cli -a 123456
+info replication
+</code></pre><p>查看集群状态</p>
+<h3 id="配置Sentinel"><a href="#配置Sentinel" class="headerlink" title="配置Sentinel"></a>配置Sentinel</h3><pre><code># redisgroup:自定义集群名，如果需要监控多个redis集群，只需要配置多次并定义不同的&lt;master-name&gt; &lt;master-redis-ip&gt;:主库ip &lt;master-redis-port&gt;:主库port &lt;quorum&gt;:最小投票数，由于有三台redis-sentinel实例，所以可以设置成2
+sentinel monitor redisgroup &lt;master-redis-ip&gt; &lt;master-redis-port&gt; &lt;quorum&gt;
+sentinel monitor redisgroup 192.168.5.108 6301 2
+
+# 注：redis主从库搭建的时候，要么都不配置密码(这样下面这句也不需要配置)，不然都需要设置成一样的密码
+sentinel auth-pass redisgroup redispassword
+# 添加后台运行
+daemonize yes
+</code></pre><p>sentinel.conf是启动redis-sentinel的核心配置文件，可以从官网下载：</p>
+<pre><code>wget http://download.redis.io/redis-stable/sentinel.conf
+</code></pre><p>找到以下配置并修改</p>
+<pre><code># mymaster:自定义集群名，如果需要监控多个redis集群，只需要配置多次并定义不同的&lt;master-name&gt; &lt;master-redis-ip&gt;:主库ip &lt;master-redis-port&gt;:主库port &lt;quorum&gt;:最小投票数，由于有三台redis-sentinel实例，所以可以设置成2
+sentinel monitor mymaster &lt;master-redis-ip&gt; &lt;master-redis-port&gt; &lt;quorum&gt;
+# 注：redis主从库搭建的时候，要么都不配置密码(这样下面这句也不需要配置)，不然都需要设置成一样的密码
+sentinel auth-pass mymaster redispassword
+# 添加后台运行
+daemonize yes
+</code></pre><p>将上面的sentinel.conf复制三份，分别为sentinel1.conf,sentinel2.conf和sentinel3.conf，再次编辑修改port为26301,26302和26303</p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><pre><code># redis-sentinel实例1
+
+docker run -it --name redis-sentinel1 -v /home/redis/6301/sentinel.conf:/usr/local/etc/redis/sentinel.conf -d redis /bin/bash
+
+
+# redis-sentinel实例2
+docker run -it --name redis-sentinel2 -v /home/redis/6302/sentinel.conf:/usr/local/etc/redis/sentinel.conf -d redis /bin/bash
+
+# redis-sentinel实例3
+docker run -it --name redis-sentinel3 -v /home/redis/6303/sentinel.conf:/usr/local/etc/redis/sentinel.conf -d redis /bin/bash
+</code></pre><p>分别进入以上三个容器启动redis-sentinel：</p>
+<pre><code>docker exec -it redis-sentinel(x) bash
+# 或redis-server /usr/local/etc/redis/sentinel.conf --sentinel
+redis-sentinel /usr/local/etc/redis/sentinel.conf
+</code></pre><p>连接并使用redis-sentinel API查看监控状况:</p>
+<pre><code>redis-cli -p 26301 (26302 | 26303)
+sentinel master mymaster 或 sentinel slaves mymaster
+</code></pre><p><img src="http://blog.cdn.nanamumu.cn/20190319195922.png" alt="sentinel 状态"></p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>进入redis-master容器，休眠60秒redis服务：</p>
+<pre><code>docker exec -it redis-6301 bash
+redis-cli -a redispassword -p 6301 DEBUG sleep 60
+</code></pre><p><img src="http://blog.cdn.nanamumu.cn/20190319201139.png" alt="redis master change "></p>
+<p>如图所示 ，已经发生主从切换</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+            <a href="/tags/穆坤/" rel="tag"># 穆坤</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/11/jenkins部署spring-boot-项目/" rel="next" title="jenkins部署spring boot 项目">
+                <i class="fa fa-chevron-left"></i> jenkins部署spring boot 项目
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">kun mu</p>
+              <p class="site-description motion-element" itemprop="description">我们的感官对于任何新的印象,不论是温和的或猛烈的,悲哀的或愉快的,一定得尝试了多次才会习惯. ——《基督山伯爵》</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sentinel-介绍"><span class="nav-number">1.</span> <span class="nav-text">Sentinel 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sentinel-原理"><span class="nav-number">2.</span> <span class="nav-text">Sentinel 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">3.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境介绍"><span class="nav-number">3.1.</span> <span class="nav-text">环境介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装master-，slave"><span class="nav-number">3.2.</span> <span class="nav-text">安装master ，slave</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取redis镜像"><span class="nav-number">3.2.1.</span> <span class="nav-text">获取redis镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行"><span class="nav-number">3.2.2.</span> <span class="nav-text">运行</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#master"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">master</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#slave-1"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">slave 1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#slave2"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">slave2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Sentinel"><span class="nav-number">3.3.</span> <span class="nav-text">配置Sentinel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">3.4.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">3.5.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kun mu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
