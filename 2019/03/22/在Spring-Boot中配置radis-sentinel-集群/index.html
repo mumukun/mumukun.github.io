@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="devops jenkins spring boot,">
+  <meta name="keywords" content="redis,spring boot,">
 
 
 
@@ -79,23 +79,18 @@
 
 
 
-<meta name="description" content="jenkins可以称得上是一种devops的神器了，下面介绍使用jenkins如何在我们常用的场景下部署spring boot 项目 基本上的步骤如下：  安装jenkins 插件安装 SSH 配置 部署项目  安装jenkins项目普通安装安装openjdk gityum 安装jdk123sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg">
-<meta name="keywords" content="devops jenkins spring boot">
+<meta name="description" content="直接写步骤吧，防止自己忘记redis 的使用场景有很多，比如  session cache  发布订阅 各种缓存 计数器 队列等  在我们的项目使用场景中，更多的是以缓存的形式来使用：对于土地确权数据，数据量大，访问次数多，并且数据格式和内容几乎一直固定。这种场景非常适合使用redis做缓存，可以大幅减轻数据库压力。 pom依赖依赖如下 &amp;lt;dependency&amp;gt;     &amp;lt;gro">
+<meta name="keywords" content="redis,spring boot">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jenkins部署spring boot 项目">
-<meta property="og:url" content="http://yoursite.com/2019/03/11/jenkins部署spring-boot-项目/index.html">
+<meta property="og:title" content="在Spring Boot中配置radis sentinel 集群">
+<meta property="og:url" content="http://yoursite.com/2019/03/22/在Spring-Boot中配置radis-sentinel-集群/index.html">
 <meta property="og:site_name" content="kun mu&#39;s blog">
-<meta property="og:description" content="jenkins可以称得上是一种devops的神器了，下面介绍使用jenkins如何在我们常用的场景下部署spring boot 项目 基本上的步骤如下：  安装jenkins 插件安装 SSH 配置 部署项目  安装jenkins项目普通安装安装openjdk gityum 安装jdk123sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg">
+<meta property="og:description" content="直接写步骤吧，防止自己忘记redis 的使用场景有很多，比如  session cache  发布订阅 各种缓存 计数器 队列等  在我们的项目使用场景中，更多的是以缓存的形式来使用：对于土地确权数据，数据量大，访问次数多，并且数据格式和内容几乎一直固定。这种场景非常适合使用redis做缓存，可以大幅减轻数据库压力。 pom依赖依赖如下 &amp;lt;dependency&amp;gt;     &amp;lt;gro">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://blog.cdn.nanamumu.cn/QQ20190311-234327.png">
-<meta property="og:image" content="http://blog.cdn.nanamumu.cn/QQ20190311-233645.png">
-<meta property="og:image" content="http://blog.cdn.nanamumu.cn/QQ20190311-233717.png">
-<meta property="og:image" content="http://blog.cdn.nanamumu.cn/QQ20190311-233913.png">
-<meta property="og:updated_time" content="2019-03-21T15:03:50.124Z">
+<meta property="og:updated_time" content="2019-03-22T15:38:24.027Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jenkins部署spring boot 项目">
-<meta name="twitter:description" content="jenkins可以称得上是一种devops的神器了，下面介绍使用jenkins如何在我们常用的场景下部署spring boot 项目 基本上的步骤如下：  安装jenkins 插件安装 SSH 配置 部署项目  安装jenkins项目普通安装安装openjdk gityum 安装jdk123sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg">
-<meta name="twitter:image" content="http://blog.cdn.nanamumu.cn/QQ20190311-234327.png">
+<meta name="twitter:title" content="在Spring Boot中配置radis sentinel 集群">
+<meta name="twitter:description" content="直接写步骤吧，防止自己忘记redis 的使用场景有很多，比如  session cache  发布订阅 各种缓存 计数器 队列等  在我们的项目使用场景中，更多的是以缓存的形式来使用：对于土地确权数据，数据量大，访问次数多，并且数据格式和内容几乎一直固定。这种场景非常适合使用redis做缓存，可以大幅减轻数据库压力。 pom依赖依赖如下 &amp;lt;dependency&amp;gt;     &amp;lt;gro">
 
 
 
@@ -125,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/11/jenkins部署spring-boot-项目/">
+  <link rel="canonical" href="http://yoursite.com/2019/03/22/在Spring-Boot中配置radis-sentinel-集群/">
 
 
 
 
 
-  <title>jenkins部署spring boot 项目 | kun mu's blog</title>
+  <title>在Spring Boot中配置radis sentinel 集群 | kun mu's blog</title>
   
 
 
@@ -268,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/11/jenkins部署spring-boot-项目/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/22/在Spring-Boot中配置radis-sentinel-集群/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="kun mu">
@@ -285,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">jenkins部署spring boot 项目</h1>
+          <h1 class="post-title" itemprop="name headline">在Spring Boot中配置radis sentinel 集群</h1>
         
 
         <div class="post-meta">
@@ -297,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T23:53:28+08:00">
-                2019-03-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-22T23:11:06+08:00">
+                2019-03-22
               </time>
             
 
@@ -307,6 +302,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/redis/" itemprop="url" rel="index">
+                    <span itemprop="name">redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -335,32 +352,202 @@
       
 
       
-        <p>jenkins可以称得上是一种devops的神器了，下面介绍使用jenkins如何在我们常用的场景下部署spring boot 项目</p>
-<p><strong>基本上的步骤如下：</strong></p>
+        <p>直接写步骤吧，防止自己忘记<br>redis 的使用场景有很多，比如</p>
 <ul>
-<li>安装jenkins</li>
-<li>插件安装</li>
-<li>SSH 配置</li>
-<li>部署项目</li>
+<li>session cache </li>
+<li>发布订阅</li>
+<li>各种缓存</li>
+<li>计数器</li>
+<li>队列等</li>
 </ul>
-<h3 id="安装jenkins项目"><a href="#安装jenkins项目" class="headerlink" title="安装jenkins项目"></a>安装jenkins项目</h3><h4 id="普通安装"><a href="#普通安装" class="headerlink" title="普通安装"></a>普通安装</h4><h5 id="安装openjdk-git"><a href="#安装openjdk-git" class="headerlink" title="安装openjdk git"></a>安装openjdk git</h5><h5 id="yum-安装jdk"><a href="#yum-安装jdk" class="headerlink" title="yum 安装jdk"></a>yum 安装jdk</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo</span><br><span class="line">sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key</span><br><span class="line">yum install jenkins</span><br></pre></td></tr></table></figure>
-<p> 修改jenkins 配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysconfig/jenkins</span><br></pre></td></tr></table></figure>
-<p>启动jenkins </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service jenkins start</span><br></pre></td></tr></table></figure>
-<p> jenkins 默认端口为8080<br> 浏览器输入地址跳转时默认要输入超级管理员密码进行解锁。<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail /var/lib/jenkins/secrets/initialAdminPassword</span><br></pre></td></tr></table></figure></p>
-<p> 输入密码解锁， 并安装插件。</p>
-<h4 id="docker-安装jenkins"><a href="#docker-安装jenkins" class="headerlink" title="docker 安装jenkins"></a>docker 安装jenkins</h4><p> 参考本人 博文 <strong>docker 安装jenkins</strong></p>
-<h3 id="配置jenkins"><a href="#配置jenkins" class="headerlink" title="配置jenkins"></a>配置jenkins</h3><h4 id="全局配置"><a href="#全局配置" class="headerlink" title="全局配置"></a>全局配置</h4><ul>
-<li>git </li>
-<li>maven </li>
-</ul>
-<h4 id="配置ssh"><a href="#配置ssh" class="headerlink" title="配置ssh"></a>配置ssh</h4><p>输入服务器地址/用户名/密码<br>可以配置remote directory 也可以不配置 。 remote directory 的地址就与服务器的文件地址对应。<br><img src="http://blog.cdn.nanamumu.cn/QQ20190311-234327.png" alt="image"></p>
-<h4 id="部署项目"><a href="#部署项目" class="headerlink" title="部署项目"></a>部署项目</h4><ul>
-<li>git 地址<br>Credentials 与GitHub账号一致<br><img src="http://blog.cdn.nanamumu.cn/QQ20190311-233645.png" alt="image"></li>
-<li>step2 ssh 配置<br>需要在全局先配置ssh 账号/密码<br><img src="http://blog.cdn.nanamumu.cn/QQ20190311-233717.png" alt="image"></li>
-<li>step3 配置sh文件<br><img src="http://blog.cdn.nanamumu.cn/QQ20190311-233913.png" alt="image"></li>
-</ul>
+<p>在我们的项目使用场景中，更多的是以缓存的形式来使用：<br>对于土地确权数据，数据量大，访问次数多，并且数据格式和内容几乎一直固定。这种场景非常适合使用redis做缓存，可以大幅减轻数据库压力。</p>
+<h2 id="pom依赖"><a href="#pom依赖" class="headerlink" title="pom依赖"></a>pom依赖</h2><p>依赖如下</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;redis.clients&lt;/groupId&gt;
+    &lt;artifactId&gt;jedis&lt;/artifactId&gt;
+    &lt;version&gt;2.9.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h2 id="yml-配置如下"><a href="#yml-配置如下" class="headerlink" title="yml 配置如下"></a>yml 配置如下</h2><pre><code># Redis数据库索引（默认为0）,如果设置为1，那么存入的key-value都存放在select 1中
+redis:
+    database: 0
+    password: redispassword
+    pool:
+        #max-active: 8
+        min-idle: 50
+        max-idle: 100
+        max-wait: -1
+        #连接池最大连接数（使用负值表示没有限制）
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        # 连接池中的最大空闲连接
+        # 连接池中的最小空闲连接
+    # 连接超时时间（毫秒）
+    timeout: 20000
+    # 集群配置
+    sentinel:
+        master: mymaster
+        nodes: 192.168.5.108:26301,192.168.5.2:26302,192.168.5.2:26303
+</code></pre><p>其中需要主要的是sentinel.nodes 的写法 ，一般sentinel 集群中会有3个sentinel部署。</p>
+<h2 id="redisConfig"><a href="#redisConfig" class="headerlink" title="redisConfig"></a>redisConfig</h2><pre><code>/**
+* redis config
+*
+* @author mukun
+*/
+@Configuration
+@EnableCaching
+public class RedisSentinelConfig extends CachingConfigurerSupport {
+
+
+    @Value(&quot;${spring.redis.timeout}&quot;)
+    private int timeout;
+
+    @Value(&quot;${spring.redis.database}&quot;)
+    private int database;
+
+    @Value(&quot;${spring.redis.password}&quot;)
+    private String password;
+
+    @Value(&quot;${spring.redis.sentinel.nodes}&quot;)
+    private String redisNodes;
+
+    @Value(&quot;${spring.redis.sentinel.master}&quot;)
+    private String master;
+
+    @Value(&quot;${spring.redis.maxIdle:300}&quot;)
+    private int maxIdle;
+    @Value(&quot;${spring.redis.maxTotal:600}&quot;)
+    private int maxTotal;
+    @Value(&quot;${spring.redis.maxWaitMillis:3000}&quot;)
+    private int maxWaitMillis;
+
+    /**
+    * redis哨兵配置
+    *
+    * @return
+    */
+    @Bean
+    public RedisSentinelConfiguration redisSentinelConfiguration() {
+        RedisSentinelConfiguration configuration = new RedisSentinelConfiguration();
+        String[] host = redisNodes.split(&quot;,&quot;);
+        for (String redisHost : host) {
+            String[] item = redisHost.split(&quot;:&quot;);
+            String ip = item[0];
+            String port = item[1];
+            configuration.addSentinel(new RedisNode(ip, Integer.parseInt(port)));
+        }
+        configuration.setMaster(master);
+        return configuration;
+    }
+
+    @Autowired
+    private JedisPoolConfig jedisPoolConfig;
+
+    @Autowired
+    private RedisSentinelConfiguration redisSentinelConfiguration;
+
+
+    @Bean
+    public JedisPoolConfig jedisPoolConfig() {
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxIdle(maxIdle);
+        jedisPoolConfig.setMaxTotal(maxTotal);
+        jedisPoolConfig.setMinIdle(10);
+        jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
+//        jedisPoolConfig.setTestOnBorrow(testOnBorrow);
+        return jedisPoolConfig;
+    }
+
+
+    /**
+    * 连接redis的工厂类
+    *
+    * @return
+    */
+    @Bean
+    public JedisConnectionFactory jedisConnectionFactory() {
+        JedisConnectionFactory jedisConnectionFactory =
+                new JedisConnectionFactory(redisSentinelConfiguration, jedisPoolConfig);
+        jedisConnectionFactory.setPassword(password);
+        return jedisConnectionFactory;
+    }
+
+    @Autowired
+    private JedisConnectionFactory jedisConnectionFactory;
+
+
+    /**
+    * 配置RedisTemplate
+    * 设置添加序列化器
+    * key 使用string序列化器
+    * value 使用Json序列化器
+    * 还有一种简答的设置方式，改变defaultSerializer对象的实现。
+    *
+    * @return
+    */
+    @Bean
+    public RedisTemplate&lt;Object, Object&gt; redisTemplate() {
+        //StringRedisTemplate的构造方法中默认设置了stringSerializer
+        RedisTemplate&lt;Object, Object&gt; template = new RedisTemplate&lt;&gt;();
+        //设置开启事务
+        template.setEnableTransactionSupport(true);
+        //set key serializer
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        template.setKeySerializer(stringRedisSerializer);
+        template.setHashKeySerializer(stringRedisSerializer);
+
+        template.setConnectionFactory(jedisConnectionFactory());
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    /**
+    * 设置RedisCacheManager
+    * 使用cache注解管理redis缓存
+    *
+    * @return
+    */
+    @Override
+    @Bean
+    public RedisCacheManager cacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
+        return redisCacheManager;
+    }
+
+    /**
+    * 自定义生成redis-key
+    *
+    * @return
+    */
+    @Override
+    public KeyGenerator keyGenerator() {
+        return new KeyGenerator() {
+            @Override
+            public Object generate(Object o, Method method, Object... objects) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(o.getClass().getName()).append(&quot;.&quot;);
+                sb.append(method.getName()).append(&quot;.&quot;);
+                for (Object obj : objects) {
+                    sb.append(obj.toString());
+                }
+                System.out.println(&quot;keyGenerator=&quot; + sb.toString());
+                return sb.toString();
+            }
+        };
+    }
+
+}
+</code></pre><h2 id="spring-boot-中使用简介"><a href="#spring-boot-中使用简介" class="headerlink" title="spring boot 中使用简介"></a>spring boot 中使用简介</h2><pre><code>@Cacheable(value = &quot;province&quot;, key = &quot;#root.methodName+&apos;[province]&apos;&quot;)
+@GetMapping(value = &quot;/province&quot;)
+public QmResult chinaProvince() {
+    List&lt;ChinaProvince&gt; result = chinaRegionService.getProvinceList();
+    return QmResult.build(result);
+}
+</code></pre><p>需要注意的是，存入redis的数据需要经过序列化。</p>
+<p>经过验证，第二次访问接口时候，直接读取redis数据，减轻数据库压力。</p>
 
       
     </div>
@@ -378,7 +565,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/devops-jenkins-spring-boot/" rel="tag"># devops jenkins spring boot</a>
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+            <a href="/tags/spring-boot/" rel="tag"># spring boot</a>
           
         </div>
       
@@ -391,8 +580,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/29/springBoot整合redis/" rel="next" title="springBoot整合redis">
-                <i class="fa fa-chevron-left"></i> springBoot整合redis
+              <a href="/2019/03/19/基于DOCKER-的Redis-Sentinel-高可用集群搭建/" rel="next" title="基于DOCKER 的Redis Sentinel 高可用集群搭建">
+                <i class="fa fa-chevron-left"></i> 基于DOCKER 的Redis Sentinel 高可用集群搭建
               </a>
             
           </div>
@@ -400,10 +589,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/19/基于DOCKER-的Redis-Sentinel-高可用集群搭建/" rel="prev" title="基于DOCKER 的Redis Sentinel 高可用集群搭建">
-                基于DOCKER 的Redis Sentinel 高可用集群搭建 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -535,7 +720,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装jenkins项目"><span class="nav-number">1.</span> <span class="nav-text">安装jenkins项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通安装"><span class="nav-number">1.1.</span> <span class="nav-text">普通安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装openjdk-git"><span class="nav-number">1.1.1.</span> <span class="nav-text">安装openjdk git</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#yum-安装jdk"><span class="nav-number">1.1.2.</span> <span class="nav-text">yum 安装jdk</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-安装jenkins"><span class="nav-number">1.2.</span> <span class="nav-text">docker 安装jenkins</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置jenkins"><span class="nav-number">2.</span> <span class="nav-text">配置jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#全局配置"><span class="nav-number">2.1.</span> <span class="nav-text">全局配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置ssh"><span class="nav-number">2.2.</span> <span class="nav-text">配置ssh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署项目"><span class="nav-number">2.3.</span> <span class="nav-text">部署项目</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pom依赖"><span class="nav-number">1.</span> <span class="nav-text">pom依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yml-配置如下"><span class="nav-number">2.</span> <span class="nav-text">yml 配置如下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redisConfig"><span class="nav-number">3.</span> <span class="nav-text">redisConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-boot-中使用简介"><span class="nav-number">4.</span> <span class="nav-text">spring boot 中使用简介</span></a></li></ol></div>
             
 
           </div>

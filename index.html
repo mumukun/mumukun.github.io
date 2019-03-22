@@ -262,6 +262,166 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/22/在Spring-Boot中配置radis-sentinel-集群/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kun mu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kun mu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/22/在Spring-Boot中配置radis-sentinel-集群/" itemprop="url">在Spring Boot中配置radis sentinel 集群</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-22T23:11:06+08:00">
+                2019-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/redis/" itemprop="url" rel="index">
+                    <span itemprop="name">redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          直接写步骤吧，防止自己忘记redis 的使用场景有很多，比如
+
+session cache 
+发布订阅
+各种缓存
+计数器
+队列等
+
+在我们的项目使用场景中，更多的是以缓存的形式来使用：对于土地确权数据，数据量大，访问次数多，并且数据格式和内容几乎一直固定。这种场景非常适合使用redis做缓存，可以大幅减轻数据库压力。
+pom依赖依赖如下
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redi
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/22/在Spring-Boot中配置radis-sentinel-集群/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/19/基于DOCKER-的Redis-Sentinel-高可用集群搭建/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -356,7 +516,7 @@
         
           
            目前来说，高可用(主从复制、主从切换)redis集群有两种方案，一种是redis-sentinel，只有一个master，各实例数据保持一致；一种是redis-cluster，也叫分布式redis集群，可以有多个master，数据分片分布在这些master上。 根据我们的条件，选择第一种给大家介绍。
-Sentinel 介绍Sentinel是Redis的高可用性（HA）解决方案，由一个或多个Sentinel实例组成的Sentinel系统可以监视任意多个主服务器，以及这些主服务器属下的所有从服务器
+Sentinel 介绍Sentinel是Redis的高可用性（HA）解决方案，由一个或多个Sentinel实例组成的Sentinel系统可以监视任意多个主服务器，以及这些主服务器属下的所有从服务器，并在被监视的主服务器故障时，自动将下线主服务器属下的某个从服务器升级为新的主服务器，然后由新的主服
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -490,7 +650,7 @@ Sentinel 介绍Sentinel是Redis的高可用性（HA）解决方案，由一个�
 SSH 配置
 部署项目
 
-安装jenkins项目普通安装安装openjdk gityum 安装jdk123sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.reposudo rpm --i
+安装jenkins项目普通安装安装openjdk gityum 安装jdk123sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.reposudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -750,7 +910,7 @@ yum 无法安装一些包
 其中对于32位的linux 是无法安装docker的 ，另外更换阿里的源 解决了yum无法安装一些package的问题。
 进入正题
 安装redis镜像12345#安装redis镜像docker pull redis#在本地磁盘创建redis的目录（用于存放redis的数据文件和配置文件）mkdir /opt/docker-software/redis
-
+使用默认的配置启动1234docker run --name redis \    -p 6379:
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1137,8 +1297,10 @@ yum 无法安装一些包
 解释：
 
 当我们在render中生猛的render string 字符串时候，直接通过ReactDOMTextComponent实例来渲染。
-当我们通过ReactElement 或者RectClass 的方式render时候，流程如图。最终调用mountComponent更新DOM。具体的逻辑应该是这样，但是根据我个人对源码的查看，事实的逻辑实现远比
-          ...
+当我们通过ReactElement 或者RectClass 的方式render时候，流程如图。最终调用mountComponent更新DOM。具体的逻辑应该是这样，但是根据我个人对源码的查看，事实的逻辑实现远比图中介绍复杂。语言太苍白，看图吧。
+
+
+          
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/06/29/React渲染流程/#more" rel="contents">
@@ -1399,144 +1561,11 @@ yum 无法安装一些包
 React创建Component的常用方式
 如果我们没有使用ES6的话我们通常使用React.createClass来创建组件。
   比如：
-  1234567var React = require(&apos;react&apos;)    var MyComponent = React.createClass(&#123;        //propTyp
+  1234567var React = require(&apos;react&apos;)    var MyComponent = React.createClass(&#123;        //propTypes        //initialState        //render    &#125;
           ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/06/20/React源码分析2-Component创建流程/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/20/React源码分析1-概述/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="kun mu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kun mu's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/20/React源码分析1-概述/" itemprop="url">React源码分析1-概述</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-20T17:48:34+08:00">
-                2017-06-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          React 源码分析 chapter1React 的源码 其实还是很复杂的，这里主要结合自己和他人的心得，对React的主要几个模块功能进行介绍。
-
-元素&amp;组件的创建
-React组件Dom的渲染流程
-setState
-React的生命周期
-
-从backbone到react 、vue 、angular 前端真的是变幻莫测。不能以不变应万变，还是要虚心学习，但是还是希望前端有摆脱混沌的那一天吧。React的源码还是很繁琐复杂的，我主要是按照几个模块来简单的探索一下，尽量让自己和别人通俗易懂吧
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/06/20/React源码分析1-概述/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1624,7 +1653,7 @@ React的生命周期
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1646,7 +1675,7 @@ React的生命周期
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
