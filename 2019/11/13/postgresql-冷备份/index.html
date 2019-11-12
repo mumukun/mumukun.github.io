@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="postgresql,数据库,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="关于cookie 、session 和token的区别，在这里就不解释了。关于其中的讨论可以查看以下讨论https://softwareengineering.stackexchange.com/questions/350092/cookie-based-vs-session-vs-token-based-vs-claims-based-authentications 在rest api 的接口开">
+<meta name="description" content="除了我们常用的热备份外，有时候我们也需要进行脚本备份个人总结 ， 随时取阅 。 postgresql   冷备份 （定时备份与恢复） 参考文档https://www.postgresql.org/docs/10/backup.html 备份方式备份方式可以分为  使用pg_dump或pg_dumpall工具，创建一个由SQL命令组成的文件。 文件系统级别备份: 直接复制PostgreSQL用于存储">
+<meta name="keywords" content="postgresql,数据库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jwt(json web token)简介">
-<meta property="og:url" content="http://yoursite.com/2019/04/14/jwt-json-web-token-简介/index.html">
+<meta property="og:title" content="postgresql 冷备份">
+<meta property="og:url" content="http://yoursite.com/2019/11/13/postgresql-冷备份/index.html">
 <meta property="og:site_name" content="kun mu&#39;s blog">
-<meta property="og:description" content="关于cookie 、session 和token的区别，在这里就不解释了。关于其中的讨论可以查看以下讨论https://softwareengineering.stackexchange.com/questions/350092/cookie-based-vs-session-vs-token-based-vs-claims-based-authentications 在rest api 的接口开">
+<meta property="og:description" content="除了我们常用的热备份外，有时候我们也需要进行脚本备份个人总结 ， 随时取阅 。 postgresql   冷备份 （定时备份与恢复） 参考文档https://www.postgresql.org/docs/10/backup.html 备份方式备份方式可以分为  使用pg_dump或pg_dumpall工具，创建一个由SQL命令组成的文件。 文件系统级别备份: 直接复制PostgreSQL用于存储">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-14T09:49:38.787Z">
+<meta property="og:updated_time" content="2019-11-12T16:20:56.812Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jwt(json web token)简介">
-<meta name="twitter:description" content="关于cookie 、session 和token的区别，在这里就不解释了。关于其中的讨论可以查看以下讨论https://softwareengineering.stackexchange.com/questions/350092/cookie-based-vs-session-vs-token-based-vs-claims-based-authentications 在rest api 的接口开">
+<meta name="twitter:title" content="postgresql 冷备份">
+<meta name="twitter:description" content="除了我们常用的热备份外，有时候我们也需要进行脚本备份个人总结 ， 随时取阅 。 postgresql   冷备份 （定时备份与恢复） 参考文档https://www.postgresql.org/docs/10/backup.html 备份方式备份方式可以分为  使用pg_dump或pg_dumpall工具，创建一个由SQL命令组成的文件。 文件系统级别备份: 直接复制PostgreSQL用于存储">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/14/jwt-json-web-token-简介/">
+  <link rel="canonical" href="http://yoursite.com/2019/11/13/postgresql-冷备份/">
 
 
 
 
 
-  <title>jwt(json web token)简介 | kun mu's blog</title>
+  <title>postgresql 冷备份 | kun mu's blog</title>
   
 
 
@@ -262,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/14/jwt-json-web-token-简介/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/13/postgresql-冷备份/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="kun mu">
@@ -279,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">jwt(json web token)简介</h1>
+          <h1 class="post-title" itemprop="name headline">postgresql 冷备份</h1>
         
 
         <div class="post-meta">
@@ -291,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-14T17:49:30+08:00">
-                2019-04-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-13T00:19:31+08:00">
+                2019-11-13
               </time>
             
 
@@ -329,19 +330,50 @@
       
 
       
-        <p>关于cookie 、session 和token的区别，在这里就不解释了。<br>关于其中的讨论可以查看以下讨论<br><a href="https://softwareengineering.stackexchange.com/questions/350092/cookie-based-vs-session-vs-token-based-vs-claims-based-authentications" target="_blank" rel="noopener">https://softwareengineering.stackexchange.com/questions/350092/cookie-based-vs-session-vs-token-based-vs-claims-based-authentications</a></p>
-<p>在rest api 的接口开发中，通常会给大家提供一个token 的东西，大致长的是这个样子：<br>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</p>
-<p>可以看出来 这一串自负由三部分组成。jwt的三个组成部分如下： Header + Playload + Signature</p>
-<p>关于token的入门介绍请参考<br>阮一峰的博客</p>
-<p><a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html" target="_blank" rel="noopener">jwt 入门教程</a></p>
-<p>阮老师解释的非常入门和详细。</p>
-<p>或者说 jwt其实是加密了的字符串：</p>
-<p>JsonData + Signature </p>
-<p>JsonData 可以存储一些用户信息，比如在我们项目中放置用户id在playload中。</p>
-<p>header ： 用来描述元信息， 比如加密算法，令牌类型。<br>playload： 用来存储我们想要传递的信息，比如用户id、用户角色等</p>
-<p>Signature：的作用是对加密的header 和playload进行验证 ，避免加密输入产生相同的输出结果（理论上）。</p>
-<h3 id="token的缺点"><a href="#token的缺点" class="headerlink" title="token的缺点"></a>token的缺点</h3><p>由于token可以携带用户敏感信息，所以不可以在token中存储例如密码等用户关键信息。</p>
-<h3 id="jwt的使用场景"><a href="#jwt的使用场景" class="headerlink" title="jwt的使用场景"></a>jwt的使用场景</h3><h4 id="REST接口调用"><a href="#REST接口调用" class="headerlink" title="REST接口调用"></a>REST接口调用</h4><h4 id="单点登录、oauth授权"><a href="#单点登录、oauth授权" class="headerlink" title="单点登录、oauth授权"></a>单点登录、oauth授权</h4><h4 id="替代session-进行状态对话"><a href="#替代session-进行状态对话" class="headerlink" title="替代session 进行状态对话"></a>替代session 进行状态对话</h4>
+        <p>除了我们常用的热备份外，有时候我们也需要进行脚本备份<br>个人总结 ， 随时取阅 。</p>
+<p>postgresql   冷备份 （定时备份与恢复）</p>
+<p>参考文档<br><a href="https://www.postgresql.org/docs/10/backup.html" target="_blank" rel="noopener">https://www.postgresql.org/docs/10/backup.html</a></p>
+<h2 id="备份方式"><a href="#备份方式" class="headerlink" title="备份方式"></a>备份方式</h2><p>备份方式可以分为</p>
+<ul>
+<li>使用pg_dump或pg_dumpall工具，创建一个由SQL命令组成的文件。</li>
+<li>文件系统级别备份: 直接复制PostgreSQL用于存储数据库中数据的文件。</li>
+</ul>
+<p>在这里我们使用sql转储来备份<br>文件备份有一个前提是数据库需要关闭才可以，恢复的时候也需要关闭数据库，有一定的局限性。</p>
+<h3 id="sql转储"><a href="#sql转储" class="headerlink" title="sql转储"></a>sql转储</h3><p>pg_dump与pg_dumpall的区别在于</p>
+<ul>
+<li>pg_dump: 把PostgreSQL数据库抽取为一个脚本文件或其他归档文件。</li>
+<li>pg_dumpall: 将一个PostgreSQL数据库集簇抽取到一个脚本文件中。</li>
+</ul>
+<blockquote>
+<p>The ability of pg_dump and psql to write to or read from pipes makes it &gt;possible to dump a database directly from one server to another, for &gt;example:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pg_dump -h host1 dbname | psql -h host2 dbname</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.postgresql.org/docs/10/app-pgdump.html" target="_blank" rel="noopener">https://www.postgresql.org/docs/10/app-pgdump.html</a></p>
+<p><a href="https://www.postgresql.org/docs/10/app-pg-dumpall.html" target="_blank" rel="noopener">https://www.postgresql.org/docs/10/app-pg-dumpall.html</a></p>
+<ul>
+<li>pgdump</li>
+<li>pgdumpall </li>
+</ul>
+<blockquote>
+<p>pg_dump — extract a PostgreSQL database into a script file or other archive file<br>pg_dump is a utility for backing up a PostgreSQL database. </p>
+</blockquote>
+<blockquote>
+<p>pg_dumpall — extract a PostgreSQL database cluster into a script file</p>
+</blockquote>
+<blockquote>
+<p>pg_dumpall is a utility for writing out (“dumping”) all PostgreSQL &gt;databases of a cluster into one script file. The script file contains SQL &gt;commands that can be used as input to psql to restore the databases. It &gt;does this by calling pg_dump for each database in a cluster. pg_dumpall &gt;also dumps global objects that are common to all databases. (pg_dump does &gt;not save these objects.) This currently includes information about &gt;database users and groups, tablespaces, and properties such as access &gt;permissions that apply to databases as a whole.</p>
+</blockquote>
+<p>我们使用pg_dump即可 。</p>
+<h3 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h3><p>转储可以被输出到脚本或归档文件格式。</p>
+<p>脚本转储是包含 SQL 命令的纯文本文件，它们可以用来重构数据库到它被转储时的状态。要从这样一个脚本恢复，可以将它“喂”给psql。</p>
+<p>归档文件格式必须与pg_restore配合使用来重建数据库。它们允许pg_restore能选择恢复什么，或者甚至在恢复之前对条目重排序。归档文件格式被设计为在架构之间可移植。</p>
+<p><a href="https://note.youdao.com/" target="_blank" rel="noopener">https://www.postgresql.org/docs/10/app-pgrestore.html</a></p>
+<h3 id="定时执行"><a href="#定时执行" class="headerlink" title="定时执行"></a>定时执行</h3><p>比如在凌晨 0:10 执行<br>10 0 <em> </em> * /home/swz/aa.sh</p>
+<h4 id="备份脚本"><a href="#备份脚本" class="headerlink" title="备份脚本"></a>备份脚本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line"># 备份存放位置</span><br><span class="line">BACKUP_DIR=/home/db/backup/</span><br><span class="line"># 如果不存在就创建</span><br><span class="line">if [ ! -d &quot;$BACKUP_DIR&quot; ]; then</span><br><span class="line">	mkdir -p &quot;$BACKUP_DIR&quot;</span><br><span class="line">fi</span><br><span class="line">cd $BACKUP_DIR</span><br><span class="line"></span><br><span class="line"># 删除30天之前的备份</span><br><span class="line">deleteDIR=$(date --date=&apos;30 day ago&apos; +%Y-%m-%d)</span><br><span class="line">rm -rf $deleteDIR</span><br><span class="line"></span><br><span class="line"># 假设每天凌晨执行 备份数据文件夹名为昨日 yyyy-MM-dd 格式</span><br><span class="line">dateDIR=$(date --date=&apos;1 day ago&apos; +%Y-%m-%d)</span><br><span class="line">mkdir $dateDIR</span><br><span class="line"></span><br><span class="line"># 备份指定的数据库</span><br><span class="line">backupDB=(db_name0 db_name1 db_name2)</span><br><span class="line">backupDBArr=$(echo $&#123;backupDB[@]&#125;)</span><br><span class="line"></span><br><span class="line"># 使用压缩转储每一个数据库</span><br><span class="line">for i in $backupDBArr; do</span><br><span class="line">	pg_dump -U postgres $i | gzip &gt; $BACKUP_DIR$dateDIR/$&#123;i&#125;_$&#123;dateDIR&#125;.gz</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<h4 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gunzip -c filename.gz | psql dbname</span><br><span class="line"> or</span><br><span class="line">cat filename.gz | gunzip | psql dbname</span><br></pre></td></tr></table></figure>
+<p>也可以使用split 恢复，split命令允许你将输出分割成较小的文件以便能够适应底层文件系统的尺寸要求。例如，让每一块的大小为1兆字节：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 备份</span><br><span class="line">pg_dump dbname | split -b 1m - filename</span><br><span class="line"># 恢复</span><br><span class="line">cat filename* | psql dbname</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -356,6 +388,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/postgresql/" rel="tag"># postgresql</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
 
       
       
@@ -365,8 +405,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/29/Centos-7-下部署安装Postgresql-主从复制集群/" rel="next" title="Centos 7 下部署安装Postgresql 主从复制集群-编译方式安装">
-                <i class="fa fa-chevron-left"></i> Centos 7 下部署安装Postgresql 主从复制集群-编译方式安装
+              <a href="/2019/11/13/规范的进行git-commit/" rel="next" title="规范的进行git commit">
+                <i class="fa fa-chevron-left"></i> 规范的进行git commit
               </a>
             
           </div>
@@ -374,10 +414,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/13/规范的进行git-commit/" rel="prev" title="规范的进行git commit">
-                规范的进行git commit <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -509,7 +545,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#token的缺点"><span class="nav-number">1.</span> <span class="nav-text">token的缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jwt的使用场景"><span class="nav-number">2.</span> <span class="nav-text">jwt的使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#REST接口调用"><span class="nav-number">2.1.</span> <span class="nav-text">REST接口调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单点登录、oauth授权"><span class="nav-number">2.2.</span> <span class="nav-text">单点登录、oauth授权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#替代session-进行状态对话"><span class="nav-number">2.3.</span> <span class="nav-text">替代session 进行状态对话</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#备份方式"><span class="nav-number">1.</span> <span class="nav-text">备份方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sql转储"><span class="nav-number">1.1.</span> <span class="nav-text">sql转储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#备份"><span class="nav-number">1.2.</span> <span class="nav-text">备份</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定时执行"><span class="nav-number">1.3.</span> <span class="nav-text">定时执行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#备份脚本"><span class="nav-number">1.3.1.</span> <span class="nav-text">备份脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#恢复"><span class="nav-number">1.3.2.</span> <span class="nav-text">恢复</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
