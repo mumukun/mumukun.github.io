@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="docker,微服务,SpringCloud,">
 
 
 
@@ -79,17 +79,24 @@
 
 
 
-<meta name="description" content="我们的感官对于任何新的印象,不论是温和的或猛烈的,悲哀的或愉快的,一定得尝试了多次才会习惯. ——《基督山伯爵》">
+<meta name="description" content="微服务简介与Docker服务编排[TOC] 微服务介绍单体架构  架构简单（架构简单 ： SSH SSM LAMP等） 单个应用 ，所有功能集合在一个应用中（投保、理赔、监管、资金拨付）     单体架构功能集合     投保   监管   理赔   权限   用户   资金拨付     单个或者数量不多的DB来维护数据 快速相应业务开发需求、快速开发、快速上线  单体架构面临的问题 所有代码耦合">
+<meta name="keywords" content="docker,微服务,SpringCloud">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微服务简介与Docker服务编排">
 <meta property="og:url" content="http://yoursite.com/2019/11/13/微服务简介与Docker服务编排/index.html">
 <meta property="og:site_name" content="kun mu&#39;s blog">
-<meta property="og:description" content="我们的感官对于任何新的印象,不论是温和的或猛烈的,悲哀的或愉快的,一定得尝试了多次才会习惯. ——《基督山伯爵》">
+<meta property="og:description" content="微服务简介与Docker服务编排[TOC] 微服务介绍单体架构  架构简单（架构简单 ： SSH SSM LAMP等） 单个应用 ，所有功能集合在一个应用中（投保、理赔、监管、资金拨付）     单体架构功能集合     投保   监管   理赔   权限   用户   资金拨付     单个或者数量不多的DB来维护数据 快速相应业务开发需求、快速开发、快速上线  单体架构面临的问题 所有代码耦合">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-12T16:28:49.892Z">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-96b80b9daeb41f4e47a481754cccdb85_hd.jpg">
+<meta property="og:image" content="http://blog.cdn.nanamumu.cn/273387-20190317154408417-983057661.png">
+<meta property="og:image" content="https://slide.cdn.myslide.cn/lhl7bJZ9c3yfWbEqqfLsrdU31Yhb/slide-25.jpg">
+<meta property="og:image" content="https://www.researchgate.net/profile/Pooyan_Jamshidi/publication/324959590/figure/fig1/AS:622733503262721@1525482645270/A-microservice-technologies-timeline.png">
+<meta property="og:image" content="http://blog.cdn.nanamumu.cn/docker%E6%9E%B6%E6%9E%84.png">
+<meta property="og:updated_time" content="2019-11-12T16:31:40.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务简介与Docker服务编排">
-<meta name="twitter:description" content="我们的感官对于任何新的印象,不论是温和的或猛烈的,悲哀的或愉快的,一定得尝试了多次才会习惯. ——《基督山伯爵》">
+<meta name="twitter:description" content="微服务简介与Docker服务编排[TOC] 微服务介绍单体架构  架构简单（架构简单 ： SSH SSM LAMP等） 单个应用 ，所有功能集合在一个应用中（投保、理赔、监管、资金拨付）     单体架构功能集合     投保   监管   理赔   权限   用户   资金拨付     单个或者数量不多的DB来维护数据 快速相应业务开发需求、快速开发、快速上线  单体架构面临的问题 所有代码耦合">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-96b80b9daeb41f4e47a481754cccdb85_hd.jpg">
 
 
 
@@ -329,7 +336,391 @@
       
 
       
-        
+        <h1 id="微服务简介与Docker服务编排"><a href="#微服务简介与Docker服务编排" class="headerlink" title="微服务简介与Docker服务编排"></a>微服务简介与Docker服务编排</h1><p>[TOC]</p>
+<h1 id="微服务介绍"><a href="#微服务介绍" class="headerlink" title="微服务介绍"></a>微服务介绍</h1><h2 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h2><p><img src="https://pic2.zhimg.com/80/v2-96b80b9daeb41f4e47a481754cccdb85_hd.jpg" alt="image"></p>
+<ul>
+<li>架构简单（架构简单 ： SSH SSM LAMP等）</li>
+<li>单个应用 ，所有功能集合在一个应用中（投保、理赔、监管、资金拨付）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>单体架构功能集合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>投保</td>
+</tr>
+<tr>
+<td>监管</td>
+</tr>
+<tr>
+<td>理赔</td>
+</tr>
+<tr>
+<td>权限</td>
+</tr>
+<tr>
+<td>用户</td>
+</tr>
+<tr>
+<td>资金拨付</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>单个或者数量不多的DB来维护数据</li>
+<li>快速相应业务开发需求、快速开发、快速上线</li>
+</ul>
+<h2 id="单体架构面临的问题"><a href="#单体架构面临的问题" class="headerlink" title="单体架构面临的问题"></a>单体架构面临的问题</h2><ul>
+<li>所有代码耦合在一个应用里，随着业务的发展，代码越来越臃肿</li>
+<li>随着团队规模的壮大，团队成员技术水平参差不齐，缺乏统一的代码规范整个应用代码越来越乱</li>
+<li>新成员加入的时候需要阅读其他的不属于自己的业务代码，花费很多时间才能融入。 代码通读一遍，累死人</li>
+<li>可能会出现因为某个sql 的问题影响整个业务运转。比如出现了sql批量处理、锁表等</li>
+<li>各种业务代码融合在一起、开发效率低，影响开发和测试以及上线进度</li>
+</ul>
+<h3 id="垂直应用架构"><a href="#垂直应用架构" class="headerlink" title="垂直应用架构"></a>垂直应用架构</h3><ul>
+<li>按照业务系统拆分，拆分粒度较大。</li>
+<li>服务拆分不彻底、业务耦合依然严重。</li>
+<li>业务拆分不彻底 团队边界不清醒 重复造轮子</li>
+</ul>
+<h3 id="微服务架构"><a href="#微服务架构" class="headerlink" title="微服务架构"></a>微服务架构</h3><p><img src="http://blog.cdn.nanamumu.cn/273387-20190317154408417-983057661.png" alt="image"></p>
+<h3 id="微服务最佳实践"><a href="#微服务最佳实践" class="headerlink" title="微服务最佳实践"></a>微服务最佳实践</h3><h5 id="业务驱动原则："><a href="#业务驱动原则：" class="headerlink" title="业务驱动原则："></a>业务驱动原则：</h5><p>根据业务范围来确定服务的边界</p>
+<h5 id="服务松耦合"><a href="#服务松耦合" class="headerlink" title="服务松耦合"></a>服务松耦合</h5><p>服务的职责单一，服务的职责在特定的业务范围内，利于敏捷开发和独立部署，每个服务只能访问自己的数据</p>
+<h5 id="服务分层原则"><a href="#服务分层原则" class="headerlink" title="服务分层原则"></a>服务分层原则</h5><p>服务应该包含基础、聚合和流程服务</p>
+<h5 id="服务独立部署"><a href="#服务独立部署" class="headerlink" title="服务独立部署"></a>服务独立部署</h5><ul>
+<li>能够独立发布或者取消发布</li>
+<li>能够水平扩展</li>
+<li>能够持续集成和自动发布</li>
+<li>能够实现服务的技术和业务监控</li>
+</ul>
+<h3 id="微服务缺点"><a href="#微服务缺点" class="headerlink" title="微服务缺点"></a>微服务缺点</h3><ul>
+<li>服务落地需要花费很大的精力</li>
+<li>对于项目性的交付要疲于应对客户的傻X需求，影响服务拆分，技术团队疲于应对</li>
+<li>微服务常常伴随着持续交付，架构问题不解决的情况下比较难于做到</li>
+<li>服务变得更多，微服务/运维 团队的工作量更大</li>
+<li>问题定位比较难</li>
+</ul>
+<h3 id="微服务选型"><a href="#微服务选型" class="headerlink" title="微服务选型"></a>微服务选型</h3><p><img src="https://slide.cdn.myslide.cn/lhl7bJZ9c3yfWbEqqfLsrdU31Yhb/slide-25.jpg" alt="image"></p>
+<h4 id="常见的服务框架内容"><a href="#常见的服务框架内容" class="headerlink" title="常见的服务框架内容"></a>常见的服务框架内容</h4><ul>
+<li>A microservice technologies timeline</li>
+</ul>
+<p><img src="https://www.researchgate.net/profile/Pooyan_Jamshidi/publication/324959590/figure/fig1/AS:622733503262721@1525482645270/A-microservice-technologies-timeline.png" alt="微服务时间线"></p>
+<p>以spring cloud 为例：</p>
+<h5 id="服务框架："><a href="#服务框架：" class="headerlink" title="服务框架："></a>服务框架：</h5><p>服务注册、发现、治理、全链路跟踪、监控、安全授权</p>
+<h5 id="基础中间件"><a href="#基础中间件" class="headerlink" title="基础中间件"></a>基础中间件</h5><p>配置管理、任务调度、统一检索、消息队列、文档生成系统、统一数据服务管理</p>
+<ul>
+<li><p>Spring Cloud Netflix：核心组件，可以对多个Netflix                OSS开源套件进行整合，包括以下几个组件：</p>
+<ul>
+<li>Eureka：服务治理组件，包含服务注册与发现</li>
+<li>Hystrix：容错管理组件，实现了熔断器</li>
+<li>Ribbon：客户端负载均衡的服务调用组件</li>
+<li>Feign：基于Ribbon和Hystrix的声明式服务调用组件</li>
+<li>Zuul：网关组件，提供智能路由、访问过滤等功能</li>
+</ul>
+</li>
+<li><p>Spring Cloud Config：配置管理工具，实现应用配置的外部化存储，支持客户端配置信息刷新、加密/解密配置内容等。</p>
+</li>
+<li>Spring Cloud Bus：事件、消息总线，用于传播集群中的状态变化或事件，以及触发后续的处理</li>
+<li>Spring Cloud Security：基于spring security的安全工具包，为我们的应用程序添加安全控制</li>
+<li>Spring Cloud Consul : 封装了Consul操作，Consul是一个服务发现与配置工具（与Eureka作用类似），与Docker容器可以无缝集成</li>
+</ul>
+<p>…<br>… 省略</p>
+<h1 id="Docker-简介"><a href="#Docker-简介" class="headerlink" title="Docker 简介"></a>Docker 简介</h1><p><img src="http://blog.cdn.nanamumu.cn/docker%E6%9E%B6%E6%9E%84.png" alt="docker 架构图"></p>
+<h3 id="Dockerfile-介绍"><a href="#Dockerfile-介绍" class="headerlink" title="Dockerfile 介绍"></a>Dockerfile 介绍</h3><p>Dockerfile由一系列指令和参数组成。每条指令，如FROM，都必须为大写字母，且后面要跟随一个参数：FROM openjdk:8 </p>
+<p>需要注意的是：一个Dockerfile 必须以FORM 开始。</p>
+<p>dockerfile 示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">FROM java:8</span><br><span class="line"></span><br><span class="line">MAINTAINER jsb@ahqianmo.com</span><br><span class="line"></span><br><span class="line">RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line"></span><br><span class="line">RUN mkdir -p /qm-report</span><br><span class="line"></span><br><span class="line">WORKDIR /qm-report</span><br><span class="line"></span><br><span class="line">EXPOSE 9131</span><br><span class="line"></span><br><span class="line">ADD ./qianmo-insurance/qianmo-insurance-report/qm-report/target/qm-report.jar ./</span><br><span class="line"></span><br><span class="line">CMD java -Djava.security.egd=file:/dev/./urandom -jar qm-report.jar</span><br><span class="line"></span><br><span class="line">````    </span><br><span class="line"></span><br><span class="line">## Docker 三剑客</span><br><span class="line">+ docker-machine </span><br><span class="line">+ docker-compose</span><br><span class="line">+ docker-swarm</span><br><span class="line"></span><br><span class="line">docker-machine就是docker公司官方提出的，用于在各种平台上快速创建具有docker服务的虚拟机的技术，甚至可以通过指定driver来定制虚拟机的实现原理（一般是virtualbox）。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dcoker-compose技术，就是通过一个.yml配置文件，将所有的容器的部署方法、文件映射、容器连接等等一系列的配置写在一个配置文件里，最后只需要执行docker-compose up命令就会像执行脚本一样的去一个个安装容器并自动部署他们，极大的便利了复杂服务的部署。</span><br><span class="line"></span><br><span class="line">swarm是基于docker平台实现的集群技术，他可以通过几条简单的指令快速的创建一个docker集群，接着在集群的共享网络上部署应用，最终实现分布式的服务。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## Docker 服务编排</span><br><span class="line"></span><br><span class="line">### docker compose</span><br><span class="line">mac 和windows 安装docker后默认会保包含 docker-compose 。 </span><br><span class="line">Linux 需要自行安装  </span><br><span class="line"></span><br><span class="line">[https://github.com/docker/compose/releases](https://github.com/docker/compose/releases)</span><br><span class="line"></span><br><span class="line">#### 简介</span><br><span class="line">#### 安装</span><br><span class="line"></span><br><span class="line">### docker compose 服务编排</span><br><span class="line">以湖南农保为例：</span><br><span class="line"></span><br><span class="line">#### 编排项目的服务</span><br></pre></td></tr></table></figure>
+<p>version: ‘2.1’<br>services:</p>
+<p>  qianmo-eureka:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-eureka/Dockerfile<br>    restart: always<br>    ports:</p>
+<pre><code> - 8761:8761
+container_name: qianmo-eureka
+hostname: qianmo-eureka
+image: qianmo-eureka
+volumes:
+  - /data/qianmo:/data/qianmo
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=dev&quot;
+</code></pre><p>  qianmo-config:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-config/Dockerfile<br>    restart: always<br>    depends_on:<br>      qianmo-eureka:<br>        condition: service_healthy<br>    ports:</p>
+<pre><code>  - 8888:8888
+container_name: qianmo-config
+hostname: qianmo-config
+image: qianmo-config
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=native,dev&quot;
+volumes:
+  - /data/qianmo:/data/qianmo
+</code></pre><p>  qianmo-insurance-biz:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-insurance/qianmo-insurance-biz/Dockerfile<br>    restart: always<br>    depends_on:<br>      qianmo-config:<br>        condition: service_healthy<br>    ports:</p>
+<pre><code>  - 7001:7001
+container_name: qianmo-insurance-biz
+hostname: qianmo-insurance-biz
+
+image: qianmo-insurance-biz
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=dev&quot;
+volumes:
+  - /data/qianmo:/data/qianmo
+logging:
+  options:
+    max-size: &quot;10m&quot;
+    max-file: &quot;10&quot;
+</code></pre><p>  qianmo-fastdfs:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-fastdfs/Dockerfile<br>    restart: always<br>    depends_on:<br>     qianmo-config:<br>       condition: service_healthy<br>    ports:</p>
+<pre><code> - 9992:9992
+container_name: qianmo-fastdfs
+hostname: qianmo-fastdfs
+
+image: qianmo-fastdfs
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=dev&quot;
+volumes:
+  - /data/qianmo:/data/qianmo
+logging:
+ options:
+   max-size: &quot;10m&quot;
+   max-file: &quot;10&quot;
+</code></pre><p>  …省略其他服务配置…</p>
+<p>  qianmo-report:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-insurance/qianmo-insurance-report/qm-report/Dockerfile<br>    restart: always<br>    depends_on:<br>      qianmo-config:<br>        condition: service_healthy<br>    ports:</p>
+<pre><code>  - 9131:9131
+container_name: qianmo-report
+hostname: qianmo-report
+
+image: qianmo-report
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=dev&quot;
+volumes:
+  - /data/qianmo:/data/qianmo
+logging:
+  options:
+    max-size: &quot;10m&quot;
+    max-file: &quot;10&quot;
+</code></pre> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">需要注意的是，在我们的使用场景中通常会存在多个项目的compose，目前建议使用同一个network 。 </span><br><span class="line">默认的docker composer 会给我们的项目创建一个网络，但是遇到多个项目的时候会出现不同网络之间无法通信的情况。对此建议使用docker network 创建指定的自定义网络。 默认创建的网络模式是bridge ，关于其他的网络模式可以自行了解。</span><br><span class="line">创建网络方式</span><br></pre></td></tr></table></figure>
+<p> docker network create  xxxx<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">docker-compose 文件如下</span><br></pre></td></tr></table></figure></p>
+<p>version: ‘2.1’<br>services:</p>
+<p>  qianmo-eureka:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-eureka/Dockerfile<br>    restart: always<br>    ports:</p>
+<pre><code> - 8761:8761
+container_name: qianmo-eureka
+hostname: qianmo-eureka
+networks:
+  - app_net
+image: qianmo-eureka
+volumes:
+  - /data/qianmo:/data/qianmo
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=dev&quot;
+</code></pre><p>  qianmo-insurance-government:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-insurance/qianmo-insurance-government/Dockerfile<br>    restart: always<br>    depends_on:<br>      qianmo-config:<br>        condition: service_healthy<br>    ports:</p>
+<pre><code>  - 7002:7002
+container_name: qianmo-insurance-government
+hostname: qianmo-insurance-government
+networks:
+
+  - app_net
+image: qianmo-insurance-government
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=dev&quot;
+volumes:
+  - /data/qianmo:/data/qianmo
+logging:
+  options:
+    max-size: &quot;10m&quot;
+    max-file: &quot;10&quot;
+</code></pre><p>  qianmo-report:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-insurance/qianmo-insurance-report/qm-report/Dockerfile<br>    restart: always<br>    depends_on:<br>      qianmo-config:<br>        condition: service_healthy<br>    ports:</p>
+<pre><code>  - 9131:9131
+container_name: qianmo-report
+hostname: qianmo-report
+networks:
+  - app_net
+image: qianmo-report
+environment:
+  - &quot;SPRING_PROFILES_ACTIVE=dev&quot;
+volumes:
+  - /data/qianmo:/data/qianmo
+logging:
+  options:
+    max-size: &quot;10m&quot;
+    max-file: &quot;10&quot;
+</code></pre><p>networks:<br>app_net:<br>    external: true<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#### docker-compose 常用命令</span><br><span class="line"> - 使用命令docker-compose up启动</span><br><span class="line"> - 使用docker-compose ps命令查看启动的服务</span><br><span class="line"> - 使用docker-compose stop停止服务</span><br><span class="line"> - 停用移除所有容器以及网络相关 docker-compose down</span><br><span class="line"> </span><br><span class="line">需要注意的是doker-compose  对服务的编排只能在局限于一台机器上，下面介绍docker三剑客之三： docker-swarm 进行集群部署</span><br><span class="line"></span><br><span class="line">### docker swarm 集群部署</span><br><span class="line"></span><br><span class="line">#### 简介</span><br><span class="line">docker swarm 是容器集群的解决方案之一 。使用docker swarm 可以将若干个docker 主机封装成一个大型的docker虚拟主机。</span><br><span class="line">本文以一个简单的swarm 集群做演示，将多个eureka 和其他服务部署在两台机器上。</span><br><span class="line"></span><br><span class="line">####  创建swam 集群</span><br><span class="line"></span><br><span class="line">以两台机器为例，如果大家手里机器资源不足可以尝试使用docker-machine创建多个virtuabox虚拟机器。</span><br><span class="line">以一台master 一台worker 为例: </span><br><span class="line">以192.168.5.108 为master节点</span><br><span class="line">以192.168.5.55 为worker节点</span><br><span class="line">1. 在108上进行swarm 初始化</span><br><span class="line">2. 创建overlay类型的网络</span><br><span class="line">3. 把55以worker角色加入swarm节点</span><br><span class="line">4. 服务编排</span><br><span class="line">+ 创建管理节点</span><br></pre></td></tr></table></figure></p>
+<p>docker swarm init  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">执行以上此命令后，会返回一个用于加入集群的令牌（Token），以便其他 worker 加入此集群</span><br><span class="line">如果想再次获取加入集群的命令，可以通过执行以下命令获取：</span><br></pre></td></tr></table></figure>
+<p>sudo docker swarm join-token worker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ 加入集群节点</span><br></pre></td></tr></table></figure></p>
+<p>docker swarm join –token <strong><strong><strong><strong>**</strong></strong></strong></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 创建一个overlay 网络</span><br></pre></td></tr></table></figure></p>
+<p>docker network create -d overlay springcloud-overlay<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">通过overlay 网络</span><br><span class="line"></span><br><span class="line">#### spring cloud 的配置</span><br><span class="line">+ docker-compose-eureka.yml</span><br></pre></td></tr></table></figure></p>
+<p>version: ‘3’<br>services:</p>
+<p>  qianmo-eureka1:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-eureka/Dockerfile<br>    restart: always<br>    ports:</p>
+<pre><code> - 8761:8761
+networks:
+  springcloud-overlay:
+    aliases:
+      - eureka
+image: qianmo-eureka
+environment:
+  - ADDITIONAL_EUREKA_SERVER_LIST=http://qianmo-eureka2:8761/eureka/
+</code></pre><p>  qianmo-eureka2:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-eureka/Dockerfile<br>    restart: always<br>    ports:</p>
+<pre><code> - 8762:8761
+networks:
+  springcloud-overlay:
+    aliases:
+      - eureka
+image: qianmo-eureka
+environment:
+  - ADDITIONAL_EUREKA_SERVER_LIST=http://qianmo-eureka1:8761/eureka/
+</code></pre><p>networks:<br>  springcloud-overlay:<br>    external:<br>      name: springcloud-overlay<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+</span><br></pre></td></tr></table></figure></p>
+<p>version: ‘3’<br>services:</p>
+<p>  qianmo-config:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-config/Dockerfile</p>
+<h1 id="restart-always"><a href="#restart-always" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
+  - qianmo-eureka
+deploy:
+  replicas: 1
+  restart_policy:
+    condition: on-failure
+  resources:
+    limits:
+      cpus: &apos;0.5&apos;
+      memory: 2048M
+    reservations:
+      cpus: &apos;0.2&apos;
+      memory: 1024M
+ports:
+  - 8888:8888
+hostname: qianmo-config
+networks:
+  - springcloud-overlay
+image: qianmo-config
+</code></pre><p>  qianmo-gateway:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-gateway/Dockerfile</p>
+<h1 id="restart-always-1"><a href="#restart-always-1" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
+  - qianmo-config
+deploy:
+  replicas: 1
+  restart_policy:
+    condition: on-failure
+  resources:
+    limits:
+      cpus: &apos;0.5&apos;
+      memory: 2048M
+    reservations:
+      cpus: &apos;0.2&apos;
+      memory: 1024M
+ports:
+  - 9998:9999
+container_name: qianmo-gateway
+hostname: qianmo-gateway
+networks:
+  - springcloud-overlay
+image: qianmo-gateway
+</code></pre><p>  qianmo-auth:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-auth/Dockerfile</p>
+<h1 id="restart-always-2"><a href="#restart-always-2" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
+  - qianmo-config
+deploy:
+  replicas: 1
+  restart_policy:
+    condition: on-failure
+  resources:
+    limits:
+      cpus: &apos;0.5&apos;
+      memory: 2048M
+    reservations:
+      cpus: &apos;0.2&apos;
+      memory: 1024M
+ports:
+  - 3009:3000
+container_name: qianmo-auth
+hostname: qianmo-auth
+networks:
+  - springcloud-overlay
+image: qianmo-auth
+logging:
+  options:
+    max-size: &quot;10m&quot;
+    max-file: &quot;10&quot;
+</code></pre><p>  qianmo-upms:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-upms/qianmo-upms-biz/Dockerfile</p>
+<h1 id="restart-always-3"><a href="#restart-always-3" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
+  - qianmo-config
+deploy:
+  replicas: 1
+  restart_policy:
+    condition: on-failure
+  resources:
+    limits:
+      cpus: &apos;0.5&apos;
+      memory: 2048M
+    reservations:
+      cpus: &apos;0.2&apos;
+      memory: 1024M
+ports:
+  - 4009:4000
+container_name: qianmo-upms
+hostname: qianmo-upms
+networks:
+  - springcloud-overlay
+image: qianmo-upms
+logging:
+  options:
+    max-size: &quot;10m&quot;
+    max-file: &quot;10&quot;
+</code></pre><p>  qianmo-monitor:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-visual/qianmo-monitor/Dockerfile</p>
+<h1 id="restart-always-4"><a href="#restart-always-4" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
+  - qianmo-config
+deploy:
+  replicas: 1
+  restart_policy:
+    condition: on-failure
+  resources:
+    limits:
+      cpus: &apos;0.5&apos;
+      memory: 2048M
+    reservations:
+      cpus: &apos;0.2&apos;
+      memory: 1024M
+ports:
+  - 5002:5001
+container_name: qianmo-monitor
+hostname: qianmo-monitor
+networks:
+  - springcloud-overlay
+image: qianmo-monitor
+logging:
+  options:
+    max-size: &quot;10m&quot;
+    max-file: &quot;10&quot;
+</code></pre><p>  qianmo-fastdfs:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-fastdfs/Dockerfile</p>
+<h1 id="restart-always-5"><a href="#restart-always-5" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
+  - qianmo-config
+deploy:
+  replicas: 1
+  restart_policy:
+    condition: on-failure
+  resources:
+    limits:
+      cpus: &apos;0.5&apos;
+      memory: 2048M
+    reservations:
+      cpus: &apos;0.2&apos;
+      memory: 1024M
+ports:
+ - 9993:9992
+container_name: qianmo-fastdfs
+hostname: qianmo-fastdfs
+networks:
+  - springcloud-overlay
+image: qianmo-fastdfs
+logging:
+ options:
+   max-size: &quot;10m&quot;
+   max-file: &quot;10&quot;
+</code></pre><p>  qianmo-elastic-job:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-elastic-job/Dockerfile<br>    restart: always<br>    depends_on:<br>     qianmo-config:<br>       condition: service_healthy<br>    ports:</p>
+<pre><code> - 9991:9998
+container_name: qianmo-elastic-job
+hostname: qianmo-elastic-job
+networks:
+  - springcloud-overlay
+image: qianmo-elastic-job
+logging:
+ options:
+   max-size: &quot;10m&quot;
+   max-file: &quot;10&quot;
+</code></pre><p>networks:<br>  springcloud-overlay:<br>    external:<br>      name: springcloud-overlay<br><code>`</code></p>
+<h4 id="执行部署"><a href="#执行部署" class="headerlink" title="执行部署"></a>执行部署</h4><p>docker stack deploy -c docker-compose-eureka.yml eureka<br>docker stack deploy -c docker-compose-cloud.yml service1</p>
+<h1 id="Kubernetes-k8s"><a href="#Kubernetes-k8s" class="headerlink" title="Kubernetes(k8s)"></a>Kubernetes(k8s)</h1>
       
     </div>
     
@@ -343,6 +734,16 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+            <a href="/tags/微服务/" rel="tag"># 微服务</a>
+          
+            <a href="/tags/SpringCloud/" rel="tag"># SpringCloud</a>
+          
+        </div>
       
 
       
@@ -413,8 +814,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -451,7 +861,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -474,6 +884,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务简介与Docker服务编排"><span class="nav-number">1.</span> <span class="nav-text">微服务简介与Docker服务编排</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务介绍"><span class="nav-number">2.</span> <span class="nav-text">微服务介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单体架构"><span class="nav-number">2.1.</span> <span class="nav-text">单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单体架构面临的问题"><span class="nav-number">2.2.</span> <span class="nav-text">单体架构面临的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#垂直应用架构"><span class="nav-number">2.2.1.</span> <span class="nav-text">垂直应用架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务架构"><span class="nav-number">2.2.2.</span> <span class="nav-text">微服务架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务最佳实践"><span class="nav-number">2.2.3.</span> <span class="nav-text">微服务最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#业务驱动原则："><span class="nav-number">2.2.3.0.1.</span> <span class="nav-text">业务驱动原则：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务松耦合"><span class="nav-number">2.2.3.0.2.</span> <span class="nav-text">服务松耦合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务分层原则"><span class="nav-number">2.2.3.0.3.</span> <span class="nav-text">服务分层原则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务独立部署"><span class="nav-number">2.2.3.0.4.</span> <span class="nav-text">服务独立部署</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务缺点"><span class="nav-number">2.2.4.</span> <span class="nav-text">微服务缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务选型"><span class="nav-number">2.2.5.</span> <span class="nav-text">微服务选型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见的服务框架内容"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">常见的服务框架内容</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务框架："><span class="nav-number">2.2.5.1.1.</span> <span class="nav-text">服务框架：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基础中间件"><span class="nav-number">2.2.5.1.2.</span> <span class="nav-text">基础中间件</span></a></li></ol></li></ol></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-简介"><span class="nav-number">3.</span> <span class="nav-text">Docker 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile-介绍"><span class="nav-number">3.0.1.</span> <span class="nav-text">Dockerfile 介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always"><span class="nav-number">4.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-1"><span class="nav-number">5.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-2"><span class="nav-number">6.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-3"><span class="nav-number">7.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-4"><span class="nav-number">8.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-5"><span class="nav-number">9.</span> <span class="nav-text">restart: always</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#执行部署"><span class="nav-number">9.0.0.1.</span> <span class="nav-text">执行部署</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-k8s"><span class="nav-number">10.</span> <span class="nav-text">Kubernetes(k8s)</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
