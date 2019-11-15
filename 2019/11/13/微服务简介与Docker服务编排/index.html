@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://slide.cdn.myslide.cn/lhl7bJZ9c3yfWbEqqfLsrdU31Yhb/slide-25.jpg">
 <meta property="og:image" content="https://www.researchgate.net/profile/Pooyan_Jamshidi/publication/324959590/figure/fig1/AS:622733503262721@1525482645270/A-microservice-technologies-timeline.png">
 <meta property="og:image" content="http://blog.cdn.nanamumu.cn/docker%E6%9E%B6%E6%9E%84.png">
-<meta property="og:updated_time" content="2019-11-12T16:31:40.889Z">
+<meta property="og:updated_time" content="2019-11-15T07:47:48.418Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务简介与Docker服务编排">
 <meta name="twitter:description" content="微服务简介与Docker服务编排[TOC] 微服务介绍单体架构  架构简单（架构简单 ： SSH SSM LAMP等） 单个应用 ，所有功能集合在一个应用中（投保、理赔、监管、资金拨付）     单体架构功能集合     投保   监管   理赔   权限   用户   资金拨付     单个或者数量不多的DB来维护数据 快速相应业务开发需求、快速开发、快速上线  单体架构面临的问题 所有代码耦合">
@@ -432,8 +432,7 @@
 <p>需要注意的是：一个Dockerfile 必须以FORM 开始。</p>
 <p>dockerfile 示例</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">FROM java:8</span><br><span class="line"></span><br><span class="line">MAINTAINER jsb@ahqianmo.com</span><br><span class="line"></span><br><span class="line">RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line"></span><br><span class="line">RUN mkdir -p /qm-report</span><br><span class="line"></span><br><span class="line">WORKDIR /qm-report</span><br><span class="line"></span><br><span class="line">EXPOSE 9131</span><br><span class="line"></span><br><span class="line">ADD ./qianmo-insurance/qianmo-insurance-report/qm-report/target/qm-report.jar ./</span><br><span class="line"></span><br><span class="line">CMD java -Djava.security.egd=file:/dev/./urandom -jar qm-report.jar</span><br><span class="line"></span><br><span class="line">````    </span><br><span class="line"></span><br><span class="line">## Docker 三剑客</span><br><span class="line">+ docker-machine </span><br><span class="line">+ docker-compose</span><br><span class="line">+ docker-swarm</span><br><span class="line"></span><br><span class="line">docker-machine就是docker公司官方提出的，用于在各种平台上快速创建具有docker服务的虚拟机的技术，甚至可以通过指定driver来定制虚拟机的实现原理（一般是virtualbox）。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dcoker-compose技术，就是通过一个.yml配置文件，将所有的容器的部署方法、文件映射、容器连接等等一系列的配置写在一个配置文件里，最后只需要执行docker-compose up命令就会像执行脚本一样的去一个个安装容器并自动部署他们，极大的便利了复杂服务的部署。</span><br><span class="line"></span><br><span class="line">swarm是基于docker平台实现的集群技术，他可以通过几条简单的指令快速的创建一个docker集群，接着在集群的共享网络上部署应用，最终实现分布式的服务。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## Docker 服务编排</span><br><span class="line"></span><br><span class="line">### docker compose</span><br><span class="line">mac 和windows 安装docker后默认会保包含 docker-compose 。 </span><br><span class="line">Linux 需要自行安装  </span><br><span class="line"></span><br><span class="line">[https://github.com/docker/compose/releases](https://github.com/docker/compose/releases)</span><br><span class="line"></span><br><span class="line">#### 简介</span><br><span class="line">#### 安装</span><br><span class="line"></span><br><span class="line">### docker compose 服务编排</span><br><span class="line">以湖南农保为例：</span><br><span class="line"></span><br><span class="line">#### 编排项目的服务</span><br></pre></td></tr></table></figure>
-<p>version: ‘2.1’<br>services:</p>
-<p>  qianmo-eureka:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-eureka/Dockerfile<br>    restart: always<br>    ports:</p>
+<p>version: ‘2.1’<br>services:<br>  qianmo-eureka:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-eureka/Dockerfile<br>    restart: always<br>    ports:</p>
 <pre><code> - 8761:8761
 container_name: qianmo-eureka
 hostname: qianmo-eureka
@@ -586,9 +585,8 @@ hostname: qianmo-config
 networks:
   - springcloud-overlay
 image: qianmo-config
-</code></pre><p>  qianmo-gateway:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-gateway/Dockerfile</p>
-<h1 id="restart-always-1"><a href="#restart-always-1" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
-  - qianmo-config
+</code></pre><p>  qianmo-gateway:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-gateway/Dockerfile<br>    depends_on:</p>
+<pre><code>  - qianmo-config
 deploy:
   replicas: 1
   restart_policy:
@@ -607,9 +605,8 @@ hostname: qianmo-gateway
 networks:
   - springcloud-overlay
 image: qianmo-gateway
-</code></pre><p>  qianmo-auth:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-auth/Dockerfile</p>
-<h1 id="restart-always-2"><a href="#restart-always-2" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
-  - qianmo-config
+</code></pre><p>  qianmo-auth:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-auth/Dockerfile<br>    depends_on:</p>
+<pre><code>  - qianmo-config
 deploy:
   replicas: 1
   restart_policy:
@@ -632,9 +629,8 @@ logging:
   options:
     max-size: &quot;10m&quot;
     max-file: &quot;10&quot;
-</code></pre><p>  qianmo-upms:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-upms/qianmo-upms-biz/Dockerfile</p>
-<h1 id="restart-always-3"><a href="#restart-always-3" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
-  - qianmo-config
+</code></pre><p>  qianmo-upms:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-upms/qianmo-upms-biz/Dockerfile<br>    depends_on:</p>
+<pre><code>  - qianmo-config
 deploy:
   replicas: 1
   restart_policy:
@@ -657,9 +653,8 @@ logging:
   options:
     max-size: &quot;10m&quot;
     max-file: &quot;10&quot;
-</code></pre><p>  qianmo-monitor:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-visual/qianmo-monitor/Dockerfile</p>
-<h1 id="restart-always-4"><a href="#restart-always-4" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
-  - qianmo-config
+</code></pre><p>  qianmo-monitor:<br>    build:<br>      context: ./<br>      dockerfile: ./qianmo-visual/qianmo-monitor/Dockerfile<br>    depends_on:</p>
+<pre><code>  - qianmo-config
 deploy:
   replicas: 1
   restart_policy:
@@ -682,9 +677,8 @@ logging:
   options:
     max-size: &quot;10m&quot;
     max-file: &quot;10&quot;
-</code></pre><p>  qianmo-fastdfs:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-fastdfs/Dockerfile</p>
-<h1 id="restart-always-5"><a href="#restart-always-5" class="headerlink" title="restart: always"></a>restart: always</h1><pre><code>depends_on:
-  - qianmo-config
+</code></pre><p>  qianmo-fastdfs:<br>    build:<br>     context: ./<br>     dockerfile: ./qianmo-fastdfs/Dockerfile<br>    depends_on:</p>
+<pre><code>  - qianmo-config
 deploy:
   replicas: 1
   restart_policy:
@@ -894,7 +888,7 @@ logging:
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务简介与Docker服务编排"><span class="nav-number">1.</span> <span class="nav-text">微服务简介与Docker服务编排</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务介绍"><span class="nav-number">2.</span> <span class="nav-text">微服务介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单体架构"><span class="nav-number">2.1.</span> <span class="nav-text">单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单体架构面临的问题"><span class="nav-number">2.2.</span> <span class="nav-text">单体架构面临的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#垂直应用架构"><span class="nav-number">2.2.1.</span> <span class="nav-text">垂直应用架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务架构"><span class="nav-number">2.2.2.</span> <span class="nav-text">微服务架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务最佳实践"><span class="nav-number">2.2.3.</span> <span class="nav-text">微服务最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#业务驱动原则："><span class="nav-number">2.2.3.0.1.</span> <span class="nav-text">业务驱动原则：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务松耦合"><span class="nav-number">2.2.3.0.2.</span> <span class="nav-text">服务松耦合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务分层原则"><span class="nav-number">2.2.3.0.3.</span> <span class="nav-text">服务分层原则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务独立部署"><span class="nav-number">2.2.3.0.4.</span> <span class="nav-text">服务独立部署</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务缺点"><span class="nav-number">2.2.4.</span> <span class="nav-text">微服务缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务选型"><span class="nav-number">2.2.5.</span> <span class="nav-text">微服务选型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见的服务框架内容"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">常见的服务框架内容</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务框架："><span class="nav-number">2.2.5.1.1.</span> <span class="nav-text">服务框架：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基础中间件"><span class="nav-number">2.2.5.1.2.</span> <span class="nav-text">基础中间件</span></a></li></ol></li></ol></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-简介"><span class="nav-number">3.</span> <span class="nav-text">Docker 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile-介绍"><span class="nav-number">3.0.1.</span> <span class="nav-text">Dockerfile 介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always"><span class="nav-number">4.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-1"><span class="nav-number">5.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-2"><span class="nav-number">6.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-3"><span class="nav-number">7.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-4"><span class="nav-number">8.</span> <span class="nav-text">restart: always</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always-5"><span class="nav-number">9.</span> <span class="nav-text">restart: always</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#执行部署"><span class="nav-number">9.0.0.1.</span> <span class="nav-text">执行部署</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-k8s"><span class="nav-number">10.</span> <span class="nav-text">Kubernetes(k8s)</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务简介与Docker服务编排"><span class="nav-number">1.</span> <span class="nav-text">微服务简介与Docker服务编排</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务介绍"><span class="nav-number">2.</span> <span class="nav-text">微服务介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单体架构"><span class="nav-number">2.1.</span> <span class="nav-text">单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单体架构面临的问题"><span class="nav-number">2.2.</span> <span class="nav-text">单体架构面临的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#垂直应用架构"><span class="nav-number">2.2.1.</span> <span class="nav-text">垂直应用架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务架构"><span class="nav-number">2.2.2.</span> <span class="nav-text">微服务架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务最佳实践"><span class="nav-number">2.2.3.</span> <span class="nav-text">微服务最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#业务驱动原则："><span class="nav-number">2.2.3.0.1.</span> <span class="nav-text">业务驱动原则：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务松耦合"><span class="nav-number">2.2.3.0.2.</span> <span class="nav-text">服务松耦合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务分层原则"><span class="nav-number">2.2.3.0.3.</span> <span class="nav-text">服务分层原则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务独立部署"><span class="nav-number">2.2.3.0.4.</span> <span class="nav-text">服务独立部署</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务缺点"><span class="nav-number">2.2.4.</span> <span class="nav-text">微服务缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务选型"><span class="nav-number">2.2.5.</span> <span class="nav-text">微服务选型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见的服务框架内容"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">常见的服务框架内容</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务框架："><span class="nav-number">2.2.5.1.1.</span> <span class="nav-text">服务框架：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基础中间件"><span class="nav-number">2.2.5.1.2.</span> <span class="nav-text">基础中间件</span></a></li></ol></li></ol></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-简介"><span class="nav-number">3.</span> <span class="nav-text">Docker 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile-介绍"><span class="nav-number">3.0.1.</span> <span class="nav-text">Dockerfile 介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-always"><span class="nav-number">4.</span> <span class="nav-text">restart: always</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#执行部署"><span class="nav-number">4.0.0.1.</span> <span class="nav-text">执行部署</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-k8s"><span class="nav-number">5.</span> <span class="nav-text">Kubernetes(k8s)</span></a></li></div>
             
 
           </div>
